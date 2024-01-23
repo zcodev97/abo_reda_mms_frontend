@@ -27,6 +27,24 @@ function WithdrawsPage() {
     alwaysShowAllBtns: true,
   });
 
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      navigate("/withdraw_details", {
+        state: {
+          invoice_id: row.invoice_id,
+          container: row.container,
+          company_name: row.company_name,
+          price_in_dinar: row.price_in_dinar,
+          price_in_dollar: row.price_in_dollar,
+          description: row.description,
+          withdraw_type: row.withdraw_type,
+          created_at: row.created_at,
+          out_to: row.out_to,
+        },
+      });
+    },
+  };
+
   async function loadWithdraws() {
     setLoading(true);
     await fetch(SYSTEM_URL + "withdraws/", {
@@ -56,6 +74,7 @@ function WithdrawsPage() {
           i.created_at = formatDate(new Date(i.created_at));
           i.company_name = i.company_name.title;
           i.container = i.container.name;
+          i.withdraw_type = i.withdraw_type.title;
         });
         setWithdraws(data);
       })
@@ -91,8 +110,14 @@ function WithdrawsPage() {
       filter: textFilter(),
     },
     {
-      dataField: "mr",
-      text: "السيد",
+      dataField: "out_to",
+      text: "الى",
+      sort: true,
+      filter: textFilter(),
+    },
+    {
+      dataField: "withdraw_type",
+      text: "نوع القيد",
       sort: true,
       filter: textFilter(),
     },
@@ -135,6 +160,14 @@ function WithdrawsPage() {
         >
           <b> اضافة</b>
         </div>
+        <div
+          className="btn btn-success m-2"
+          onClick={() => {
+            navigate("/withdraw_report");
+          }}
+        >
+          <b> تقرير </b>
+        </div>
       </div>
       <BootstrapTable
         className="text-center"
@@ -145,6 +178,7 @@ function WithdrawsPage() {
         columns={withdrawsColumns}
         data={withdraws}
         pagination={pagination}
+        rowEvents={rowEvents}
         filter={filterFactory()}
       />
     </>

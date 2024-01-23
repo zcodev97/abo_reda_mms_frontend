@@ -12,6 +12,12 @@ import AddContainerPage from "./pages/containers/add";
 import AddCompanyPage from "./pages/companies/add";
 import AddWithdrawPage from "./pages/withdraws/add";
 import AddDepositPage from "./pages/deposits/add";
+import DepositDetailsPage from "./pages/deposits/details";
+import WithDrawDetialsPage from "./pages/withdraws/details";
+import PersonTypePage from "./pages/withdraw_types/records";
+import AddPersonTypePage from "./pages/withdraw_types/add";
+import WithDrawReportPage from "./pages/withdraws/report";
+import DepositsReportPage from "./pages/deposits/report";
 
 function App() {
   return (
@@ -19,7 +25,12 @@ function App() {
       <div className="container-fluid bg-white" style={{ height: "100vh" }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LoginPage />} />
+            <Route
+              path="/"
+              element={
+                window.token === undefined ? <LoginPage /> : <ContainersPage />
+              }
+            />
 
             <Route path="/login" element={<LoginPage />} />
             <Route path="/containers" element={<ContainersPage />} />
@@ -33,9 +44,15 @@ function App() {
             <Route path="/add_company" element={<AddCompanyPage />} />
 
             <Route path="/withdraws" element={<WithdrawsPage />} />
+            <Route path="/withdraw_details" element={<WithDrawDetialsPage />} />
+            <Route path="/withdraw_types" element={<PersonTypePage />} />
+            <Route path="/add_withdraw_type" element={<AddPersonTypePage />} />
             <Route path="/add_withdraw" element={<AddWithdrawPage />} />
+            <Route path="/withdraw_report" element={<WithDrawReportPage />} />
+            <Route path="/deposits_report" element={<DepositsReportPage />} />
             {/*  */}
             <Route path="/deposits" element={<DepositsPage />} />
+            <Route path="/deposit_details" element={<DepositDetailsPage />} />
             <Route path="/add_deposit" element={<AddDepositPage />} />
 
             <Route path="*" element={<NoPage />} />

@@ -60,6 +60,39 @@ function AddWithdrawPage() {
   const [companiesDropDownMenu, setCompaniesDropDownMenu] = useState([]);
   let dropdownMenuCompaniesTemp = [];
 
+  // date ranges drop down menu
+  const [selectedWithDrawType, setSelectedWithdrawType] = useState("");
+  const [withdrawTypesDropDown, setWithdrawTypesDropdown] = useState([]);
+  let tempWithdrawTypesDropDown = [];
+
+  // load withdraw types
+
+  async function loadWithdrawTypes() {
+    setLoading(true);
+    await fetch(SYSTEM_URL + "withdraw_types/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${window.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        data.forEach((source) => {
+          tempWithdrawTypesDropDown.push({
+            label: source.title,
+            value: source.id,
+          });
+        });
+        setWithdrawTypesDropdown(tempWithdrawTypesDropDown);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    setLoading(false);
+  }
+
   async function loadCompanies() {
     setLoading(true);
 
@@ -98,7 +131,7 @@ function AddWithdrawPage() {
         company_name: selectedCompany.value,
         price_in_dinar: totalDinar,
         price_in_dollar: totalDollar,
-        mr: mr,
+        withdraw_type: selectedWithDrawType,
         description: description,
         out_to: outTo,
         created_by: window.user_id,
@@ -117,7 +150,7 @@ function AddWithdrawPage() {
           company_name: selectedCompany.value,
           price_in_dinar: totalDinar,
           price_in_dollar: totalDollar,
-          mr: mr,
+          withdraw_type: selectedWithDrawType,
           description: description,
           out_to: outTo,
           created_by: window.user_id,
@@ -151,6 +184,7 @@ function AddWithdrawPage() {
   useEffect(() => {
     loadContainers();
     loadCompanies();
+    loadWithdrawTypes();
   }, []);
 
   return (
@@ -158,6 +192,11 @@ function AddWithdrawPage() {
       <NavBar />
 
       <div className="container-fluid text-center">
+        <div className="container border rounded m-1 p-1 ">
+          <h2>
+            <b> اضافة صرف</b>
+          </h2>
+        </div>
         <table className="table table-bordered table-striped table-hover">
           <thead>
             <tr>
@@ -174,18 +213,17 @@ function AddWithdrawPage() {
             {/*  */}
             <tr>
               <td>
-                <input
-                  onChange={(e) => {
-                    setMr(e.target.value);
-                  }}
-                  type="text"
-                  className="form-control text-center border border-dark"
-                  id="username"
-                  style={{ fontSize: "20px" }}
+                {/* drop down menu to select date */}
+                <Select
+                  className="text-center"
+                  defaultValue={selectedWithDrawType}
+                  options={withdrawTypesDropDown}
+                  onChange={(opt) => setSelectedWithdrawType(opt.value)}
+                  placeholder={"..."}
                 />
               </td>
               <td>
-                <b> السيد </b>
+                <b> نوع القيد </b>
               </td>
             </tr>
             {/*  */}

@@ -149,6 +149,7 @@ function CompanyDetailsPage() {
           i.created_at = formatDate(new Date(i.created_at));
           i.company_name = i.company_name.title;
           i.container = i.container.name;
+          i.withdraw_type = i.withdraw_type.title;
         });
         setWithdraws(data);
       })
@@ -164,7 +165,6 @@ function CompanyDetailsPage() {
       sort: true,
       filter: textFilter(),
     },
-
     {
       dataField: "description",
       text: "التفاصيل",
@@ -185,8 +185,14 @@ function CompanyDetailsPage() {
       filter: textFilter(),
     },
     {
-      dataField: "mr",
-      text: "السيد",
+      dataField: "out_to",
+      text: "الى",
+      sort: true,
+      filter: textFilter(),
+    },
+    {
+      dataField: "withdraw_type",
+      text: "نوع القيد",
       sort: true,
       filter: textFilter(),
     },
@@ -213,6 +219,42 @@ function CompanyDetailsPage() {
     loadDeposits();
     loadWithdraws();
   }, []);
+
+  const DepositsRowEvents = {
+    onClick: (e, row, rowIndex) => {
+      navigate("/deposit_details", {
+        state: {
+          invoice_id: row.invoice_id,
+          container: row.container,
+          company_name: row.company_name,
+          price_in_dinar: row.price_in_dinar,
+          price_in_dollar: row.price_in_dollar,
+          description: row.description,
+          received_from: row.received_from,
+          created_at: row.created_at,
+        },
+      });
+    },
+  };
+
+  const WithdrawRrowEvents = {
+    onClick: (e, row, rowIndex) => {
+      navigate("/withdraw_details", {
+        state: {
+          invoice_id: row.invoice_id,
+          container: row.container,
+          company_name: row.company_name,
+          price_in_dinar: row.price_in_dinar,
+          price_in_dollar: row.price_in_dollar,
+          description: row.description,
+          withdraw_type: row.withdraw_type,
+          created_at: row.created_at,
+          out_to: row.out_to,
+        },
+      });
+    },
+  };
+
   return (
     <>
       <NavBar />
@@ -235,6 +277,7 @@ function CompanyDetailsPage() {
         data={deposits}
         pagination={pagination}
         filter={filterFactory()}
+        rowEvents={DepositsRowEvents}
       />
       <hr />
       <div className="container text-center">
@@ -249,6 +292,7 @@ function CompanyDetailsPage() {
         columns={withdrawsColumns}
         data={withdraws}
         pagination={pagination}
+        rowEvents={WithdrawRrowEvents}
         filter={filterFactory()}
       />
     </>

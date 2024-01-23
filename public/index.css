@@ -10,12 +10,12 @@
 
 .react-bootstrap-table table {
   table-layout: auto !important;
-  text-align: center;
+   text-align: center;
 }
 .table thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #b71646;
-  background-color: #dddddd;
+  background-color: #ede9e9;
   color: rgb(58, 56, 56);
   font-weight: bold;
 }

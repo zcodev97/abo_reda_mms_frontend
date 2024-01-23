@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SYSTEM_URL, formatDate } from "../../global";
 import NavBar from "../navbar";
 import { useLocation } from "react-router-dom";
@@ -8,255 +8,207 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
+import jsPDF from "jspdf";
+import font from "../Amiri-Regular-normal";
+import html2canvas from "html2canvas";
 
-function CompanyDetailsPage() {
+function WithDrawDetialsPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [deposits, setDeposits] = useState([]);
-  const [withdraws, setWithdraws] = useState([]);
+  const tableRef = useRef(null);
 
-  async function loadDeposits() {
-    setLoading(true);
-    await fetch(SYSTEM_URL + "company_deposits/" + location.state.id, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${window.token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        data.map((i) => {
-          i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "IQD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
+  async function exportToPDF() {
+    const pdf = new jsPDF("landscape");
 
-          i.price_in_dollar = i.price_in_dollar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
+    const input = tableRef.current;
+    html2canvas(input, { scale: 1.0 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/jpeg", 2.0); // JPEG format with quality 0.75
 
-          i.created_at = formatDate(new Date(i.created_at));
-          i.company_name = i.company_name.title;
-          i.container = i.container.name;
-        });
-        // console.log(data);
-        setDeposits(data);
-      })
-      .catch((error) => {
-        alert(error);
-      })
-      .finally(() => {
-        setLoading(false);
+      const pdf = new jsPDF({
+        // orientation: "landscape", // Set orientation to landscape
+        unit: "mm", // Use millimeters as the unit for dimensions
+        format: "a4", // Use A4 size paper
       });
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      // Define margin values
+      const marginLeft = 10; // Left margin in mm
+      const marginRight = 10; // Right margin in mm
+      const marginTop = 10; // Top margin in mm
+      const marginBottom = 10; // Bottom margin in mm
+
+      // Calculate the adjusted width and height with margins
+      const adjustedWidth = pdfWidth - marginLeft - marginRight;
+      const adjustedHeight = pdfHeight - marginTop - marginBottom;
+
+      // Calculate the x and y positions to center the adjusted table
+      const xPosition =
+        marginLeft + (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
+      const yPosition =
+        marginTop + (pdf.internal.pageSize.getHeight() - pdfHeight) / 8;
+
+      pdf.addImage(
+        imgData,
+        "PNG",
+        xPosition,
+        yPosition,
+        adjustedWidth,
+        adjustedHeight
+      );
+      pdf.save(
+        `سند صرف ${location.state.company_name} - ${location.state.created_at} - ${location.state.withdraw_type}.pdf`
+      );
+    });
   }
-  const depositsColumns = [
-    {
-      dataField: "created_at",
-      text: "تاريخ الانشاء",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "received_from",
-      text: "استلام من",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "description",
-      text: "التفاصيل",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "price_in_dollar",
-      text: "مبلغ الدولار",
-      sort: true,
-      filter: textFilter(),
-    },
 
-    {
-      dataField: "price_in_dinar",
-      text: "مبلغ الدينار",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "company_name",
-      text: "اسم الشركة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "container",
-      text: "القاصة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "invoice_id",
-      text: "تسلسل السجل",
-      sort: true,
-      filter: textFilter(),
-    },
-  ];
-
-  const pagination = paginationFactory({
-    page: 1,
-    sizePerPage: 15,
-    lastPageText: ">>",
-    firstPageText: "<<",
-    nextPageText: ">",
-    prePageText: "<",
-    showTotal: true,
-    alwaysShowAllBtns: true,
-  });
-
-  async function loadWithdraws() {
-    setLoading(true);
-    await fetch(SYSTEM_URL + "company_withdraws/" + location.state.id, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${window.token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        data.map((i) => {
-          i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "IQD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
-
-          i.price_in_dollar = i.price_in_dollar.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
-
-          i.created_at = formatDate(new Date(i.created_at));
-          i.company_name = i.company_name.title;
-          i.container = i.container.name;
-        });
-        setWithdraws(data);
-      })
-      .catch((error) => {
-        alert(error);
-      });
-    setLoading(false);
-  }
-  const withdrawsColumns = [
-    {
-      dataField: "created_at",
-      text: "تاريخ الانشاء",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "received_from",
-      text: "استلام من",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "description",
-      text: "التفاصيل",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "price_in_dollar",
-      text: "مبلغ الدولار",
-      sort: true,
-      filter: textFilter(),
-    },
-
-    {
-      dataField: "price_in_dinar",
-      text: "مبلغ الدينار",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "mr",
-      text: "السيد",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "company_name",
-      text: "اسم الشركة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "container",
-      text: "القاصة",
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: "invoice_id",
-      text: "تسلسل السجل",
-      sort: true,
-      filter: textFilter(),
-    },
-  ];
-  useEffect(() => {
-    loadDeposits();
-    loadWithdraws();
-  }, []);
   return (
     <>
       <NavBar />
-      <div className="container text-center">
-        <h3> آسم الشركة</h3>
-        <h3>{location.state.name} </h3>
-      </div>
 
       <hr />
+
       <div className="container text-center">
-        <h1 className="text-success border rounded"> الادخالات</h1>
+        <div className="btn btn-warning p-2" onClick={exportToPDF}>
+          {" "}
+          ⬇️ تحميل
+        </div>
       </div>
-      <BootstrapTable
-        className="text-center"
-        hover={true}
-        bordered={true}
-        bootstrap4
-        keyField="id"
-        columns={depositsColumns}
-        data={deposits}
-        pagination={pagination}
-        filter={filterFactory()}
-      />
       <hr />
-      <div className="container text-center">
-        <h1 className="text-danger border rounded"> الصرفيات</h1>
-      </div>
-      <BootstrapTable
-        className="text-center"
-        hover={true}
-        bordered={true}
-        bootstrap4
-        keyField="id"
-        columns={withdrawsColumns}
-        data={withdraws}
-        pagination={pagination}
-        filter={filterFactory()}
-      />
+
+      <table id="mytable" ref={tableRef} className="table p-2 text-center mt-4">
+        <thead className="mt-4">
+          <tr>
+            <td> </td>
+            <td
+              colSpan={4}
+              className="text-center bg-success text-light rounded"
+            >
+              <h4>
+                <b>سند صرف</b>
+              </h4>
+            </td>
+
+            <td> </td>
+          </tr>
+          <tr>
+            <td> </td>
+            <td colSpan={4} className="text-center">
+              <h2>
+                <b>{location.state.company_name}</b>
+              </h2>
+            </td>
+
+            <td> </td>
+          </tr>
+        </thead>
+        <tbody style={{ borderStyle: "" }}>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.invoice_id} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> رقم السند</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.withdraw_type} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> : نوع القيد</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.out_to} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> : الى</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.created_at} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> : التاريخ</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.price_in_dinar} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> : مبلغ الدينار</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.price_in_dollar} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> : مبلغ الدولار</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
+          <br /> <br /> <br /> <br /> <br /> <br /> <br />
+          <br /> <br /> <br />
+          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
+          <tr>
+            <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> التدقيق </h4>
+            </td>
+            <td></td>
+            <td className="text-start">
+              {" "}
+              <h4> الحسابات </h4>
+            </td>
+          </tr>
+          <br /> <br /> <br />
+        </tbody>
+      </table>
     </>
   );
 }
-export default CompanyDetailsPage;
+export default WithDrawDetialsPage;

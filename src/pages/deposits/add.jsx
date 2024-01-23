@@ -143,6 +143,11 @@ function AddDepositPage() {
       <NavBar />
 
       <div className="container-fluid text-center">
+        <div className="container border rounded m-1 p-1 ">
+          <h2>
+            <b> اضافة ايداع</b>
+          </h2>
+        </div>
         <table className="table table-bordered table-striped table-hover">
           <thead>
             <tr>

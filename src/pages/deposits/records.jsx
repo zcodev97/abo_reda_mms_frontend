@@ -118,6 +118,23 @@ function DepositsPage() {
     alwaysShowAllBtns: true,
   });
 
+  const rowEvents = {
+    onClick: (e, row, rowIndex) => {
+      navigate("/deposit_details", {
+        state: {
+          invoice_id: row.invoice_id,
+          container: row.container,
+          company_name: row.company_name,
+          price_in_dinar: row.price_in_dinar,
+          price_in_dollar: row.price_in_dollar,
+          description: row.description,
+          received_from: row.received_from,
+          created_at: row.created_at,
+        },
+      });
+    },
+  };
+
   useEffect(() => {
     loadDeposits();
   }, []);
@@ -127,7 +144,7 @@ function DepositsPage() {
 
       <hr />
       <div className="container text-center">
-        <h1 className="text-success"> الادخالات</h1>
+        <h1 className="text-success"> الايداعات</h1>
       </div>
       <div className="container text-center">
         <div
@@ -138,6 +155,14 @@ function DepositsPage() {
         >
           <b> اضافة</b>
         </div>
+        <div
+          className="btn btn-success m-2"
+          onClick={() => {
+            navigate("/deposits_report");
+          }}
+        >
+          <b> تقرير </b>
+        </div>
       </div>
       <BootstrapTable
         className="text-center"
@@ -147,6 +172,7 @@ function DepositsPage() {
         keyField="id"
         columns={depositsColumns}
         data={deposits}
+        rowEvents={rowEvents}
         pagination={pagination}
         filter={filterFactory()}
       />

@@ -45,6 +45,7 @@ function ContainerDetailsPage() {
           i.created_at = formatDate(new Date(i.created_at));
           i.company_name = i.company_name.title;
           i.container = i.container.name;
+          i.received_from = i.received_from.title;
         });
         // console.log(data);
         setDeposits(data);
@@ -148,6 +149,7 @@ function ContainerDetailsPage() {
           i.created_at = formatDate(new Date(i.created_at));
           i.company_name = i.company_name.title;
           i.container = i.container.name;
+          i.withdraw_type = i.withdraw_type.title;
         });
         setWithdraws(data);
       })
@@ -163,12 +165,7 @@ function ContainerDetailsPage() {
       sort: true,
       filter: textFilter(),
     },
-    {
-      dataField: "received_from",
-      text: "استلام من",
-      sort: true,
-      filter: textFilter(),
-    },
+
     {
       dataField: "description",
       text: "التفاصيل",
@@ -189,8 +186,14 @@ function ContainerDetailsPage() {
       filter: textFilter(),
     },
     {
-      dataField: "mr",
+      dataField: "withdraw_type",
       text: "السيد",
+      sort: true,
+      filter: textFilter(),
+    },
+    {
+      dataField: "out_to",
+      text: "الي",
       sort: true,
       filter: textFilter(),
     },
@@ -213,6 +216,40 @@ function ContainerDetailsPage() {
       filter: textFilter(),
     },
   ];
+
+  const rowDepositEvents = {
+    onClick: (e, row, rowIndex) => {
+      navigate("/deposit_details", {
+        state: {
+          invoice_id: row.invoice_id,
+          container: row.container,
+          company_name: row.company_name,
+          price_in_dinar: row.price_in_dinar,
+          price_in_dollar: row.price_in_dollar,
+          description: row.description,
+          received_from: row.received_from,
+          created_at: row.created_at,
+        },
+      });
+    },
+  };
+
+  const rowWithdrawEvents = {
+    onClick: (e, row, rowIndex) => {
+      navigate("/withdraw_details", {
+        state: {
+          invoice_id: row.invoice_id,
+          container: row.container,
+          company_name: row.company_name,
+          price_in_dinar: row.price_in_dinar,
+          price_in_dollar: row.price_in_dollar,
+          description: row.description,
+          withdraw_type: row.withdraw_type,
+          created_at: row.created_at,
+        },
+      });
+    },
+  };
   useEffect(() => {
     loadDeposits();
     loadWithdraws();
@@ -239,6 +276,7 @@ function ContainerDetailsPage() {
         data={deposits}
         pagination={pagination}
         filter={filterFactory()}
+        rowEvents={rowDepositEvents}
       />
       <hr />
       <div className="container text-center">
@@ -254,6 +292,7 @@ function ContainerDetailsPage() {
         data={withdraws}
         pagination={pagination}
         filter={filterFactory()}
+        rowEvents={rowWithdrawEvents}
       />
     </>
   );
