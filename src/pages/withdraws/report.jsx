@@ -300,7 +300,7 @@ function WithDrawReportPage() {
               setActiveSearch(!activeSearch);
             }}
           >
-            <b> تفعيل البحث</b>
+            <b> {activeSearch ? "اخفاء" : "تفعيل"} البحث</b>
           </btn>
         </div>
 
