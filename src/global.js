@@ -8,7 +8,7 @@ function formatDate(dateObject = new Date()) {
   return formattedDateString;
 }
 
-const SYSTEM_URL = "http://http://38.180.105.203/:8000/";
+const SYSTEM_URL = "http://38.180.105.203:8000/";
 // const SYSTEM_URL = "http://127.0.0.1:8000/";
 
 export { formatDate, SYSTEM_URL };

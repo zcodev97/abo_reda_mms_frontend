@@ -17,7 +17,7 @@ function ContainersPage() {
 
   async function loadData() {
     setLoading(true);
-    await fetch(SYSTEM_URL + "/containers/", {
+    await fetch(SYSTEM_URL + "containers/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
