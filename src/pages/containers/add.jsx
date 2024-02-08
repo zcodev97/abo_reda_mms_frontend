@@ -12,43 +12,44 @@ function AddContainerPage() {
   const [totalDollar, setTotalDollar] = useState(0);
 
   function addContainer() {
-    if (window.confirm("هل انت متاكد ؟") == true) {
-      setLoading(true);
+    // if (window.confirm("هل انت متاكد ؟") == true) {
 
-      fetch(SYSTEM_URL + "containers/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${window.token}`,
-        },
+    // } else {
+    //   alert("لقد الغيت عملية الأضافة");
+    // }
+    setLoading(true);
 
-        body: JSON.stringify({
-          name: containerName,
-          total_dinar: totalDinar,
-          total_dollar: totalDollar,
-          created_by: window.user_id,
-        }),
+    fetch(SYSTEM_URL + "containers/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${window.token}`,
+      },
+
+      body: JSON.stringify({
+        name: containerName,
+        total_dinar: 0,
+        total_dollar: 0,
+        created_by: window.user_id,
+      }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return {};
       })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          }
-          return {};
-        })
-        .then((data) => {
-          alert("تم اضافة سجل ");
-          navigate("/containers", { replace: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error + "😕");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      alert("لقد الغيت عملية الأضافة");
-    }
+      .then((data) => {
+        alert("تم اضافة سجل ");
+        navigate("/containers", { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error + "😕");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
@@ -88,7 +89,7 @@ function AddContainerPage() {
             </tr>
             {/*  */}
             {/*  */}
-            <tr>
+            {/* <tr>
               <td>
                 <input
                   onChange={(e) => {
@@ -103,9 +104,9 @@ function AddContainerPage() {
               <td>
                 <b> مبلغ الدينار</b>
               </td>
-            </tr>
+            </tr> */}
             {/*  */}
-            <tr>
+            {/* <tr>
               <td>
                 <input
                   onChange={(e) => {
@@ -120,7 +121,7 @@ function AddContainerPage() {
               <td>
                 <b> مبلغ الدولار</b>
               </td>
-            </tr>
+            </tr> */}
             {/*  */}
           </tbody>
         </table>
