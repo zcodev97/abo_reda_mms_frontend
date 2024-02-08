@@ -17,11 +17,11 @@ function NavBar() {
     setLoading(true);
 
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("email");
+    localStorage.removeItem("is_superuser");
 
-    window.token = "";
-    window.username = "";
-    window.user_id = "";
-    window.email = "";
     setLoading(false);
     // console.log(showNavBar);
     navigate("/login", { replace: true });
@@ -60,35 +60,54 @@ function NavBar() {
               >
                 <span className="navbar-toggler-icon"></span>
               </button>
-              <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav">
-                  <li className="nav-item rounded m-1">
-                    <Link className={navLinkClassName} to="/containers">
-                      <h5>القاصات</h5>
-                    </Link>
-                  </li>
-                  <li className="nav-item rounded border-4 m-1">
-                    <Link className={navLinkClassName} to="/companies">
-                      <h5>الشركات</h5>
-                    </Link>
-                  </li>
-                  <li className="nav-item rounded border-4 m-1">
-                    <Link className={navLinkClassName} to="/withdraws">
-                      <h5>الصرفيات</h5>
-                    </Link>
-                  </li>
-                  <li className="nav-item rounded border-4 m-1">
-                    <Link className={navLinkClassName} to="/deposits">
-                      <h5>الايداعات</h5>
-                    </Link>
-                  </li>
-                  <li className="nav-item rounded border-4 m-1">
-                    <Link className={navLinkClassName} to="/withdraw_types">
-                      <h5> القيود</h5>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+
+              {localStorage.getItem("is_superuser") === "true" ? (
+                <div className="collapse navbar-collapse" id="navbarNav">
+                  <ul className="navbar-nav">
+                    <li className="nav-item rounded m-1">
+                      <Link className={navLinkClassName} to="/containers">
+                        <h5>القاصات</h5>
+                      </Link>
+                    </li>
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/companies">
+                        <h5>الشركات</h5>
+                      </Link>
+                    </li>
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/withdraws">
+                        <h5>الصرفيات</h5>
+                      </Link>
+                    </li>
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/deposits">
+                        <h5>الايداعات</h5>
+                      </Link>
+                    </li>
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/withdraw_types">
+                        <h5> القيود</h5>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                <div className="collapse navbar-collapse" id="navbarNav">
+                  <ul className="navbar-nav">
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/withdraws">
+                        <h5>الصرفيات</h5>
+                      </Link>
+                    </li>
+
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/withdraw_types">
+                        <h5> القيود</h5>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
           {/* End of the main navbar content */}
@@ -112,7 +131,7 @@ function NavBar() {
                   });
                 }}
               >
-                👤<b> {window.username}</b>
+                👤<b> {localStorage.getItem("username")}</b>
               </li>
               <li className="nav-item rounded m-1">
                 <Link

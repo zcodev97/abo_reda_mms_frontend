@@ -78,7 +78,7 @@ function AddWithdrawPage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         data.forEach((source) => {
           tempWithdrawTypesDropDown.push({
             label: source.title,
@@ -105,7 +105,7 @@ function AddWithdrawPage() {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         response.forEach((i) => {
           dropdownMenuCompaniesTemp.push({
             label: i.title,
@@ -165,7 +165,7 @@ function AddWithdrawPage() {
           return {};
         })
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           alert("تم اضافة سجل ");
           navigate("/withdraws", { replace: true });
         })

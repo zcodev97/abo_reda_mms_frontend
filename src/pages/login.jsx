@@ -34,10 +34,7 @@ function Login() {
         localStorage.setItem("username", data.user.username);
         localStorage.setItem("user_id", data.user.id);
         localStorage.setItem("email", data.user.email);
-        window.token = data.access;
-        window.username = data.user.username;
-        window.user_id = data.user.id;
-        window.email = data.user.email;
+        localStorage.setItem("is_superuser", data.user.is_superuser);
 
         navigate("/containers", { replace: true });
       })

@@ -117,7 +117,6 @@ function AddDepositPage() {
           return {};
         })
         .then((data) => {
-          console.log(data);
           alert("تم اضافة سجل ");
           navigate("/deposits", { replace: true });
         })

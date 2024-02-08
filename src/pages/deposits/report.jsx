@@ -74,9 +74,9 @@ function DepositsReportPage() {
         adjustedHeight
       );
       pdf.save(
-        `تقرير الادخالات ${formatDate(startFirstDate)} - ${formatDate(
-          endFirstDate
-        )}.pdf`
+        `تقرير الادخالات   - ${reportTitle} -  ${formatDate(
+          startFirstDate
+        )} - ${formatDate(endFirstDate)}.pdf`
       );
     });
   }

@@ -74,9 +74,9 @@ function WithDrawReportPage() {
         adjustedHeight
       );
       pdf.save(
-        `تقرير الصرفيات ${formatDate(startFirstDate)} - ${formatDate(
-          endFirstDate
-        )}.pdf`
+        `تقرير الصرفيات  - ${reportTitle} -  ${formatDate(
+          startFirstDate
+        )} - ${formatDate(endFirstDate)}.pdf`
       );
     });
     // pdf.addFileToVFS("Amiri-Regular-normal.ttf", font);
@@ -167,7 +167,7 @@ function WithDrawReportPage() {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
 
         setTotalDinar(
           data.reduce((accumulator, currentItem) => {
