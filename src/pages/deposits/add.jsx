@@ -105,7 +105,7 @@ function AddDepositPage() {
           price_in_dollar: totalDollar,
           received_from: receivedFrom,
           description: description,
-          created_by: window.user_id,
+          created_by: localStorage.getItem("user_id"),
           created_at: recordDate,
         }),
       })
@@ -182,15 +182,29 @@ function AddDepositPage() {
             {/*  */}
             <tr>
               <td>
-                <input
-                  onChange={(e) => {
-                    setTotalDinar(e.target.value);
-                  }}
-                  type="number"
-                  className="form-control text-center border border-dark"
-                  id="username"
-                  style={{ fontSize: "20px" }}
-                />
+                <div
+                  className="container text-center"
+                  style={{ display: "flex" }}
+                >
+                  <p>
+                    {Number(totalDinar).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "IQD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </p>
+                  <div className="container" style={{ width: "100px" }}></div>
+                  <input
+                    onChange={(e) => {
+                      setTotalDinar(e.target.value);
+                    }}
+                    type="number"
+                    className="form-control text-center border border-dark"
+                    id="username"
+                    style={{ fontSize: "20px" }}
+                  />
+                </div>
               </td>
               <td>
                 <b> مبلغ الدينار</b>
@@ -199,18 +213,32 @@ function AddDepositPage() {
             {/*  */}
             <tr>
               <td>
-                <input
-                  onChange={(e) => {
-                    setTotalDollar(e.target.value);
-                  }}
-                  type="number"
-                  className="form-control text-center border border-dark"
-                  id="username"
-                  style={{ fontSize: "20px" }}
-                />
+                <div
+                  className="container text-center"
+                  style={{ display: "flex" }}
+                >
+                  <p>
+                    {Number(totalDollar).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </p>
+                  <div className="container" style={{ width: "100px" }}></div>
+                  <input
+                    onChange={(e) => {
+                      setTotalDollar(e.target.value);
+                    }}
+                    type="number"
+                    className="form-control text-center border border-dark"
+                    id="username"
+                    style={{ fontSize: "20px" }}
+                  />
+                </div>
               </td>
               <td>
-                <b> مبلغ الدولار</b>
+                <b>مبلغ الدولار</b>
               </td>
             </tr>
             {/*  */}

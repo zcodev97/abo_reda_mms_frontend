@@ -28,6 +28,7 @@ function DepositsReportPage() {
   const [totalDinar, setTotalDinar] = useState(0);
   const [totalDollar, setTotalDollar] = useState(0);
   const [activeSearch, setActiveSearch] = useState(false);
+  const [reportTitle, setReportTitle] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -238,7 +239,7 @@ function DepositsReportPage() {
     <>
       <NavBar />
 
-      <div className="container-fluid p-2 mt-2  border-primary text-dark rounded ">
+      <div className="container-fluid p-2 mt-2  text-dark ">
         <h3 className="text-center" id="test">
           <b> تقرير الايداعات </b>
         </h3>
@@ -254,7 +255,7 @@ function DepositsReportPage() {
           </btn>
         </div>
 
-        <div className="container    rounded p-4 mt-2 mb-2 ">
+        <div className="container  p-4 mt-2 mb-2 ">
           <table className="table">
             <thead>
               <tr>
@@ -304,14 +305,28 @@ function DepositsReportPage() {
         </div>
         <div className="container">
           <div
-            className="table-responsive border table-strpied "
+            className="table-responsive table-strpied "
             id="mytable"
             ref={tableRef}
           >
-            {/* <div className="container">
-              <h3 className="text-center"> شركة نيبور </h3>
-              <h3 className="text-center"> تقرير تعزيز القاصة الكلي </h3>
-            </div> */}
+            <div
+              className="container text-center p-2"
+              style={{ marginTop: "30px" }}
+            >
+              <input
+                onChange={(e) => {
+                  setReportTitle(e.target.value);
+                }}
+                type="text"
+                className="form-control text-center"
+                id="reportTitle"
+                style={{
+                  fontSize: "20px",
+                  borderStyle: "outset",
+                }}
+                dir="rtl"
+              />
+            </div>
             <div
               className="container-fluid"
               style={{ height: 500, overflow: "auto" }}

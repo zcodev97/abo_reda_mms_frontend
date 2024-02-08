@@ -28,6 +28,7 @@ function WithDrawReportPage() {
   const [totalDinar, setTotalDinar] = useState(0);
   const [totalDollar, setTotalDollar] = useState(0);
   const [activeSearch, setActiveSearch] = useState(false);
+  const [reportTitle, setReportTitle] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -353,7 +354,25 @@ function WithDrawReportPage() {
           </table>
         </div>
 
-        <div className="table-responsive border " id="mytable" ref={tableRef}>
+        <div className="table-responsive " id="mytable" ref={tableRef}>
+          <div
+            className="container text-center p-2"
+            style={{ marginTop: "30px" }}
+          >
+            <input
+              onChange={(e) => {
+                setReportTitle(e.target.value);
+              }}
+              type="text"
+              className="form-control text-center"
+              id="reportTitle"
+              style={{
+                fontSize: "20px",
+                borderStyle: "outset",
+              }}
+              dir="rtl"
+            />
+          </div>
           <div
             className="container-fluid"
             style={{ height: 500, overflow: "auto" }}
@@ -371,7 +390,7 @@ function WithDrawReportPage() {
               filter={filterFactory({ afterFilter })}
             />
             <div className="container text-center">
-              <table className="table table-hover table-bordered">
+              <table className="table table-hover">
                 <tbody>
                   <tr>
                     <td>
