@@ -87,9 +87,15 @@ function WithDrawDetialsPage() {
               className="text-center bg-success text-light rounded"
             >
               <div className="container text-center">
-                <h3>
-                  <b> شركة نيبور للصناعات الدوائية</b>
-                </h3>
+                <div className="container">
+                  <h3>
+                    شركة
+                    <b>
+                      {"  "}
+                      {location.state.company_name} {"  "}
+                    </b>
+                  </h3>
+                </div>
                 <h4>
                   <b> قسم الحسابات</b>
                 </h4>
@@ -184,6 +190,20 @@ function WithDrawDetialsPage() {
               <h4>
                 {" "}
                 <b> : مبلغ الدولار</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.description} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> : التفاصيل</b>{" "}
               </h4>
             </td>
           </tr>

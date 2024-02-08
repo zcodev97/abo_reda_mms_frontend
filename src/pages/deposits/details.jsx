@@ -86,21 +86,24 @@ function DepositDetailsPage() {
               colSpan={4}
               className="text-center bg-success text-light rounded"
             >
-              <h4>
-                <b>سند ايداع</b>
-              </h4>
+              <div className="container text-center">
+                <div className="container">
+                  <h3>
+                    شركة
+                    <b>
+                      {"  "}
+                      {location.state.company_name} {"  "}
+                    </b>
+                  </h3>
+                </div>
+                <h4>
+                  <b> قسم الحسابات</b>
+                </h4>
+                <h4>
+                  <b>سند ايداع</b>
+                </h4>
+              </div>
             </td>
-
-            <td> </td>
-          </tr>
-          <tr>
-            <td> </td>
-            <td colSpan={4} className="text-center">
-              <h2>
-                <b>{location.state.company_name}</b>
-              </h2>
-            </td>
-
             <td> </td>
           </tr>
         </thead>
@@ -172,6 +175,20 @@ function DepositDetailsPage() {
               <h4>
                 {" "}
                 <b> : مبلغ الدولار</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
+              <h4> {location.state.description} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> : التفاصيل</b>{" "}
               </h4>
             </td>
           </tr>
