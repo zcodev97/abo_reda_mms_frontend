@@ -49,57 +49,45 @@ function AddCompanyPage() {
   }
 
   function addCompany() {
-    console.log({
-      title: name,
-      container: {
-        id: selectedContainer.value,
-        name: selectedContainer.label,
-        total_dinar: selectedContainer.total_dinar,
-        total_dollar: selectedContainer.total_dollar,
-        created_by: selectedContainer.created_by,
+    // if (window.confirm("هل انت متاكد ؟") == true) {
+
+    // } else {
+    //   alert("لقد الغيت عملية الأضافة");
+    // }
+    setLoading(true);
+
+    fetch(SYSTEM_URL + "company_create/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${window.token}`,
       },
-      total_dinar: totalDinar,
-      total_dollar: totalDollar,
-      created_by: window.user_id,
-    });
-    if (window.confirm("هل انت متاكد ؟") == true) {
-      setLoading(true);
 
-      fetch(SYSTEM_URL + "company_create/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${window.token}`,
-        },
-
-        body: JSON.stringify({
-          title: name,
-          container: selectedContainer.value,
-          total_dinar: totalDinar,
-          total_dollar: totalDollar,
-          created_by: window.user_id,
-        }),
+      body: JSON.stringify({
+        title: name,
+        container: selectedContainer.value,
+        total_dinar: 0,
+        total_dollar: 0,
+        created_by: window.user_id,
+      }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return {};
       })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          }
-          return {};
-        })
-        .then((data) => {
-          alert("تم اضافة سجل ");
-          navigate("/companies", { replace: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error + "😕");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      alert("لقد الغيت عملية الأضافة");
-    }
+      .then((data) => {
+        alert("تم اضافة سجل ");
+        navigate("/companies", { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error + "😕");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   useEffect(() => {
@@ -143,7 +131,7 @@ function AddCompanyPage() {
             </tr>
             {/*  */}
             {/*  */}
-            <tr>
+            {/* <tr>
               <td>
                 <input
                   onChange={(e) => {
@@ -158,9 +146,9 @@ function AddCompanyPage() {
               <td>
                 <b> مبلغ الدينار</b>
               </td>
-            </tr>
+            </tr> */}
             {/*  */}
-            <tr>
+            {/* <tr>
               <td>
                 <input
                   onChange={(e) => {
@@ -175,7 +163,7 @@ function AddCompanyPage() {
               <td>
                 <b> مبلغ الدولار</b>
               </td>
-            </tr>
+            </tr> */}
             {/*  */}
             {/*  */}
             <tr>
