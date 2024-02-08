@@ -232,12 +232,18 @@ function AddWithdrawPage() {
               <td>
                 <input
                   onChange={(e) => {
-                    setTotalDinar(e.target.value);
+                    setTotalDinar(
+                      e.target.value.toLocaleString("en-US", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      })
+                    );
                   }}
                   type="number"
                   className="form-control text-center border border-dark"
                   id="username"
                   style={{ fontSize: "20px" }}
+                  value={totalDinar}
                 />
               </td>
               <td>

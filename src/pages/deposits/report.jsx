@@ -308,6 +308,10 @@ function DepositsReportPage() {
             id="mytable"
             ref={tableRef}
           >
+            {/* <div className="container">
+              <h3 className="text-center"> شركة نيبور </h3>
+              <h3 className="text-center"> تقرير تعزيز القاصة الكلي </h3>
+            </div> */}
             <div
               className="container-fluid"
               style={{ height: 500, overflow: "auto" }}

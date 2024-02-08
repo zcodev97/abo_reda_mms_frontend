@@ -26,7 +26,6 @@ function ContainerDetailsPage() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         data.map((i) => {
           i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
             style: "currency",
@@ -45,9 +44,7 @@ function ContainerDetailsPage() {
           i.created_at = formatDate(new Date(i.created_at));
           i.company_name = i.company_name.title;
           i.container = i.container.name;
-          i.received_from = i.received_from.title;
         });
-        // console.log(data);
         setDeposits(data);
       })
       .catch((error) => {

@@ -86,19 +86,17 @@ function WithDrawDetialsPage() {
               colSpan={4}
               className="text-center bg-success text-light rounded"
             >
-              <h4>
-                <b>سند صرف</b>
-              </h4>
-            </td>
-
-            <td> </td>
-          </tr>
-          <tr>
-            <td> </td>
-            <td colSpan={4} className="text-center">
-              <h2>
-                <b>{location.state.company_name}</b>
-              </h2>
+              <div className="container text-center">
+                <h3>
+                  <b> شركة نيبور للصناعات الدوائية</b>
+                </h3>
+                <h4>
+                  <b> قسم الحسابات</b>
+                </h4>
+                <h4>
+                  <b>سند صرف</b>
+                </h4>
+              </div>
             </td>
 
             <td> </td>
