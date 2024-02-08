@@ -31,7 +31,7 @@ function AddWithdrawPage() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${window.token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((response) => response.json())
@@ -73,7 +73,7 @@ function AddWithdrawPage() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${window.token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((response) => response.json())
@@ -142,7 +142,7 @@ function AddWithdrawPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
 
         body: JSON.stringify({

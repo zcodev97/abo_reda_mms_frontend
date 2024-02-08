@@ -21,7 +21,7 @@ function ContainerDetailsPage() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${window.token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((response) => response.json())
@@ -123,7 +123,7 @@ function ContainerDetailsPage() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${window.token}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((response) => response.json())

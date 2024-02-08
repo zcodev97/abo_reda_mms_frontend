@@ -16,6 +16,8 @@ function NavBar() {
   async function handleLogout() {
     setLoading(true);
 
+    localStorage.removeItem("token");
+
     window.token = "";
     window.username = "";
     window.user_id = "";

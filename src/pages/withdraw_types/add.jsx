@@ -18,7 +18,7 @@ function AddPersonTypePage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
 
         body: JSON.stringify({

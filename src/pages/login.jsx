@@ -2,7 +2,7 @@ import { useState, React, useEffect } from "react";
 import Loading from "./loading";
 import { useNavigate } from "react-router-dom";
 import { SYSTEM_URL } from "../global";
- 
+
 function Login() {
   const navigate = useNavigate();
 
@@ -29,11 +29,16 @@ function Login() {
           alert(data.detail);
           return;
         }
+
+        localStorage.setItem("token", data.access);
+        localStorage.setItem("username", data.user.username);
+        localStorage.setItem("user_id", data.user.id);
+        localStorage.setItem("email", data.user.email);
         window.token = data.access;
         window.username = data.user.username;
         window.user_id = data.user.id;
         window.email = data.user.email;
-        
+
         navigate("/containers", { replace: true });
       })
       .catch((error) => {

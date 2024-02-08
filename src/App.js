@@ -28,7 +28,11 @@ function App() {
             <Route
               path="/"
               element={
-                window.token === undefined ? <LoginPage /> : <ContainersPage />
+                localStorage.getItem("token") === undefined ? (
+                  <LoginPage />
+                ) : (
+                  <ContainersPage />
+                )
               }
             />
 
