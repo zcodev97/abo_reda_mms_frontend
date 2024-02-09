@@ -32,115 +32,13 @@ function WithDrawReportPage() {
 
   const [loading, setLoading] = useState(false);
 
-  function exportToPDF() {
-    const pdf = new jsPDF("landscape");
-
-    const input = tableRef.current;
-    html2canvas(input, { scale: 5.0 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/jpeg", 20); // JPEG format with quality 0.75
-
-      const pdf = new jsPDF({
-        orientation: "landscape", // Set orientation to landscape
-        unit: "mm", // Use millimeters as the unit for dimensions
-        format: "a4", // Use A4 size paper
-      });
-
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-      // Define margin values
-      const marginLeft = 2; // Left margin in mm
-      const marginRight = 2; // Right margin in mm
-      const marginTop = 5; // Top margin in mm
-      const marginBottom = 5; // Bottom margin in mm
-
-      // Calculate the adjusted width and height with margins
-      const adjustedWidth = pdfWidth - marginLeft - marginRight;
-      const adjustedHeight = pdfHeight - marginTop - marginBottom;
-
-      // Calculate the x and y positions to center the adjusted table
-      const xPosition =
-        marginLeft + (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
-      const yPosition =
-        marginTop + (pdf.internal.pageSize.getHeight() - pdfHeight) / 8;
-
-      pdf.addImage(
-        imgData,
-        "jpeg",
-        xPosition,
-        yPosition,
-        adjustedWidth,
-        adjustedHeight
-      );
-      pdf.save(
-        `تقرير الصرفيات  - ${reportTitle} -  ${formatDate(
-          startFirstDate
-        )} - ${formatDate(endFirstDate)}.pdf`
-      );
-    });
-    // pdf.addFileToVFS("Amiri-Regular-normal.ttf", font);
-    // pdf.addFont("Amiri-Regular-normal.ttf", "Amiri-Regular", "normal");
-
-    // pdf.setFont("Amiri-Regular", "normal");
-
-    // pdf.autoTable({
-    //   head: [
-    //     Object.keys(Object.values(data.reverse())[0]).map((header, index) => {
-    //       return header;
-    //     }),
-    //   ],
-    //   body: Object.values(data.reverse()).map((header, index) =>
-    //     Object.values(header).map((sh, si) => sh)
-    //   ),
-    //   styles: {
-    //     font: "Amiri-Regular",
-    //     fontSize: 10,
-    //     fontStyle: "bold",
-    //   },
-    //   headStyles: {
-    //     fontStyle: "bold",
-    //   },
-
-    //   didParseCell: function (data) {
-    //     if (data.row.index === 0) {
-    //       // Set style for header cells
-
-    //       data.cell.styles.halign = "center"; // Text alignment for header cells
-    //     } else {
-    //       // Set style for data cells
-
-    //       data.cell.styles.halign = "center"; // Text alignment for data cells
-    //     }
-    //   },
-    // });
-
-    // pdf.save(
-    //   `Invoice - from ${formatDate(startFirstDate)}- to ${formatDate(
-    //     endFirstDate
-    //   )}.pdf`
-    // );
-  }
-  const rowEvents = {
-    onClick: (e, row, rowIndex) => {
-      navigate("/withdraw_details", {
-        state: {
-          invoice_id: row.invoice_id,
-          container: row.container,
-          company_name: row.company_name,
-          price_in_dinar: row.price_in_dinar,
-          price_in_dollar: row.price_in_dollar,
-          description: row.description,
-          withdraw_type: row.withdraw_type,
-          created_at: row.created_at,
-        },
-      });
-    },
+  const exportToPDF = () => {
+    window.print();
   };
 
   const pagination = paginationFactory({
     page: 1,
-    sizePerPage: 15,
+    sizePerPage: 10000,
     lastPageText: ">>",
     firstPageText: "<<",
     nextPageText: ">",
@@ -251,11 +149,18 @@ function WithDrawReportPage() {
       sort: true,
       filter: activeSearch ? textFilter() : null,
     },
+    // {
+    //   dataField: "invoice_id",
+    //   text: "تسلسل السجل",
+    //   sort: true,
+    //   filter: activeSearch ? textFilter() : null,
+    // },
     {
-      dataField: "invoice_id",
-      text: "تسلسل السجل",
-      sort: true,
-      filter: activeSearch ? textFilter() : null,
+      dataField: "rowNumber",
+      text: "تسلسل",
+      formatter: (cellContent, row, rowIndex) => {
+        return rowIndex + 1; // Adding 1 because rowIndex starts at 0
+      },
     },
   ];
   function convertToNormalNumber(price) {
@@ -294,7 +199,7 @@ function WithDrawReportPage() {
           <b> تقرير الصرفيات </b>
         </h3>
 
-        <div className="container text-end">
+        <div className="container text-end" id="no-print">
           <btn
             className="btn btn-primary text-light "
             onClick={() => {
@@ -313,14 +218,16 @@ function WithDrawReportPage() {
                   <div
                     className="container btn border border-2  border-danger text-danger  text-center"
                     onClick={exportToPDF}
+                    id="no-print"
                   >
-                    <b> تحميل 📁 </b>
+                    <b> طباعة 📁 </b>
                   </div>
                 </td>
                 <td>
                   <div
                     className="container btn btn-light border border-2 border-primary text-primary"
                     onClick={loadWithdraws}
+                    id="no-print"
                   >
                     <b> تنفيذ </b>
                   </div>
@@ -354,10 +261,10 @@ function WithDrawReportPage() {
           </table>
         </div>
 
-        <div className="table-responsive " id="mytable" ref={tableRef}>
+        <div className="table" id="mytable" ref={tableRef}>
           <div
             className="container text-center p-2"
-            style={{ marginTop: "30px" }}
+            style={{ marginTop: "20px" }}
           >
             <input
               onChange={(e) => {
@@ -375,7 +282,7 @@ function WithDrawReportPage() {
           </div>
           <div
             className="container-fluid"
-            style={{ height: 500, overflow: "auto" }}
+            // style={{ height: 500, overflow: "auto" }}
           >
             <BootstrapTable
               className="text-center"
@@ -386,7 +293,8 @@ function WithDrawReportPage() {
               keyField="id"
               columns={withdrawsColumns}
               data={data}
-              rowEvents={rowEvents}
+              // rowEvents={rowEvents}
+              pagination={pagination}
               filter={filterFactory({ afterFilter })}
             />
             <div className="container text-center">
@@ -418,7 +326,6 @@ function WithDrawReportPage() {
               </table>
             </div>
           </div>
-
           <table className="table table-strpied">
             <tbody>
               <br /> <br /> <br /> <br /> <br /> <br /> <br />

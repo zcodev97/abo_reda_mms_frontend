@@ -32,69 +32,57 @@ function DepositsReportPage() {
 
   const [loading, setLoading] = useState(false);
 
-  function exportToPDF() {
-    const pdf = new jsPDF("landscape");
+  // function exportToPDF() {
+  //   const pdf = new jsPDF("landscape");
 
-    const input = tableRef.current;
-    html2canvas(input, { scale: 5.0 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/jpeg", 20); // JPEG format with quality 0.75
+  //   const input = tableRef.current;
+  //   html2canvas(input, { scale: 5.0 }).then((canvas) => {
+  //     const imgData = canvas.toDataURL("image/jpeg", 20); // JPEG format with quality 0.75
 
-      const pdf = new jsPDF({
-        orientation: "landscape", // Set orientation to landscape
-        unit: "mm", // Use millimeters as the unit for dimensions
-        format: "a4", // Use A4 size paper
-      });
+  //     const pdf = new jsPDF({
+  //       orientation: "landscape", // Set orientation to landscape
+  //       unit: "mm", // Use millimeters as the unit for dimensions
+  //       format: "a4", // Use A4 size paper
+  //     });
 
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  //     const imgProps = pdf.getImageProperties(imgData);
+  //     const pdfWidth = pdf.internal.pageSize.getWidth();
+  //     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-      // Define margin values
-      const marginLeft = 2; // Left margin in mm
-      const marginRight = 2; // Right margin in mm
-      const marginTop = 5; // Top margin in mm
-      const marginBottom = 5; // Bottom margin in mm
+  //     // Define margin values
+  //     const marginLeft = 2; // Left margin in mm
+  //     const marginRight = 2; // Right margin in mm
+  //     const marginTop = 5; // Top margin in mm
+  //     const marginBottom = 5; // Bottom margin in mm
 
-      // Calculate the adjusted width and height with margins
-      const adjustedWidth = pdfWidth - marginLeft - marginRight;
-      const adjustedHeight = pdfHeight - marginTop - marginBottom;
+  //     // Calculate the adjusted width and height with margins
+  //     const adjustedWidth = pdfWidth - marginLeft - marginRight;
+  //     const adjustedHeight = pdfHeight - marginTop - marginBottom;
 
-      // Calculate the x and y positions to center the adjusted table
-      const xPosition =
-        marginLeft + (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
-      const yPosition =
-        marginTop + (pdf.internal.pageSize.getHeight() - pdfHeight) / 8;
+  //     // Calculate the x and y positions to center the adjusted table
+  //     const xPosition =
+  //       marginLeft + (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
+  //     const yPosition =
+  //       marginTop + (pdf.internal.pageSize.getHeight() - pdfHeight) / 8;
 
-      pdf.addImage(
-        imgData,
-        "jpeg",
-        xPosition,
-        yPosition,
-        adjustedWidth,
-        adjustedHeight
-      );
-      pdf.save(
-        `تقرير الادخالات   - ${reportTitle} -  ${formatDate(
-          startFirstDate
-        )} - ${formatDate(endFirstDate)}.pdf`
-      );
-    });
-  }
-  const rowEvents = {
-    onClick: (e, row, rowIndex) => {
-      navigate("/deposit_details", {
-        state: {
-          invoice_id: row.invoice_id,
-          container: row.container,
-          company_name: row.company_name,
-          price_in_dinar: row.price_in_dinar,
-          price_in_dollar: row.price_in_dollar,
-          description: row.description,
-          received_from: row.received_from,
-          created_at: row.created_at,
-        },
-      });
-    },
+  //     pdf.addImage(
+  //       imgData,
+  //       "jpeg",
+  //       xPosition,
+  //       yPosition,
+  //       adjustedWidth,
+  //       adjustedHeight
+  //     );
+  //     pdf.save(
+  //       `تقرير الادخالات   - ${reportTitle} -  ${formatDate(
+  //         startFirstDate
+  //       )} - ${formatDate(endFirstDate)}.pdf`
+  //     );
+  //   });
+  // }
+
+  const exportToPDF = () => {
+    window.print();
   };
 
   function convertToNormalNumber(price) {
@@ -231,6 +219,17 @@ function DepositsReportPage() {
     },
   ];
 
+  const pagination = paginationFactory({
+    page: 1,
+    sizePerPage: 25,
+    lastPageText: ">>",
+    firstPageText: "<<",
+    nextPageText: ">",
+    prePageText: "<",
+    showTotal: true,
+    alwaysShowAllBtns: true,
+  });
+
   if (loading) {
     return <Loading />;
   }
@@ -244,7 +243,7 @@ function DepositsReportPage() {
           <b> تقرير الايداعات </b>
         </h3>
 
-        <div className="container text-end">
+        <div className="container text-end" id="no-print">
           <btn
             className="btn btn-primary text-light "
             onClick={() => {
@@ -263,14 +262,16 @@ function DepositsReportPage() {
                   <div
                     className="container btn border border-2  border-danger text-danger  text-center"
                     onClick={exportToPDF}
+                    id="no-print"
                   >
-                    <b> تحميل 📁 </b>
+                    <b> طباعة 📁 </b>
                   </div>
                 </td>
                 <td>
                   <div
                     className="container btn btn-light border border-2 border-primary text-primary"
                     onClick={loadDeposits}
+                    id="no-print"
                   >
                     <b> تنفيذ </b>
                   </div>
@@ -340,7 +341,7 @@ function DepositsReportPage() {
                 keyField="id"
                 columns={withdrawsColumns}
                 data={data}
-                rowEvents={rowEvents}
+                pagination={pagination}
                 filter={filterFactory({ afterFilter })}
               />
               <div className="container text-center">

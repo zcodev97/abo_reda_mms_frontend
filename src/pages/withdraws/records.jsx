@@ -18,7 +18,7 @@ function WithdrawsPage() {
 
   const pagination = paginationFactory({
     page: 1,
-    sizePerPage: 15,
+    sizePerPage: 5,
     lastPageText: ">>",
     firstPageText: "<<",
     nextPageText: ">",

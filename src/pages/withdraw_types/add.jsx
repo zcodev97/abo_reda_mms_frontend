@@ -11,40 +11,48 @@ function AddPersonTypePage() {
   const [name, setName] = useState("");
 
   function addPersonType() {
-    if (window.confirm("هل انت متاكد ؟") == true) {
-      setLoading(true);
+    // if (window.confirm("هل انت متاكد ؟") == true) {
 
-      fetch(SYSTEM_URL + "create_withdraw_type/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    // } else {
+    //   alert("لقد الغيت عملية الأضافة");
+    // }
+    setLoading(true);
 
-        body: JSON.stringify({
-          title: name,
-        }),
+    fetch(SYSTEM_URL + "create_withdraw_type/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+
+      body: JSON.stringify({
+        title: name,
+      }),
+    })
+      .then((response) => {
+        return response.status;
       })
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json();
-          }
-          return {};
-        })
-        .then((data) => {
-          alert("تم اضافة سجل ");
-          navigate("/withdraw_types", { replace: true });
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error + "😕");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      alert("لقد الغيت عملية الأضافة");
-    }
+      .then((data) => {
+        if (data === 403) {
+          alert(" خطأ لاتوجد صلاحية لاضافة قيد");
+        } else if (data === 201) {
+          alert(" تمت الاضافة");
+        } else if (data === 400) {
+          alert("خطآ لا يمكن اضافة قيد بنفس الاسم");
+        } else {
+          alert(data);
+        }
+
+        navigate("/withdraw_types", { replace: true });
+      })
+      .catch((error) => {
+        alert(error);
+        console.log(error);
+        alert(error + "😕");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (

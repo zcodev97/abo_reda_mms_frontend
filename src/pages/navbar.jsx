@@ -37,7 +37,10 @@ function NavBar() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-sm navbar-dark rounded p-2">
+      <nav
+        className="navbar navbar-expand-sm navbar-dark rounded p-2"
+        id="no-print"
+      >
         <div className="container-fluid d-flex justify-content-between">
           {/* Start of the main navbar content */}
           <div>

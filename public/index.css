@@ -20,4 +20,19 @@
   font-weight: bold;
 }
 
- 
+
+/* for print */
+@media print {
+  @page {
+    size: landscape;
+  }
+  
+  body {
+    width: 100%;
+  }
+  
+  #no-print {
+    display: none;
+  }
+  /* Additional print-specific styles can go here */
+}

@@ -126,18 +126,6 @@ function AddWithdrawPage() {
     if (window.confirm("هل انت متاكد ؟") == true) {
       setLoading(true);
 
-      console.log({
-        container: selectedContainer.value,
-        company_name: selectedCompany.value,
-        price_in_dinar: totalDinar,
-        price_in_dollar: totalDollar,
-        withdraw_type: selectedWithDrawType,
-        description: description,
-        out_to: outTo,
-        created_by: localStorage.getItem("user_id"),
-        created_at: recordDate,
-      });
-
       fetch(SYSTEM_URL + "create_withdraw/", {
         method: "POST",
         headers: {
@@ -170,7 +158,7 @@ function AddWithdrawPage() {
           navigate("/withdraws", { replace: true });
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           alert(error + "😕");
         })
         .finally(() => {
