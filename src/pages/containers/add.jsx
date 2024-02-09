@@ -30,7 +30,7 @@ function AddContainerPage() {
         name: containerName,
         total_dinar: 0,
         total_dollar: 0,
-        created_by: window.user_id,
+        created_by: localStorage.getItem("user_id"),
       }),
     })
       .then((response) => {

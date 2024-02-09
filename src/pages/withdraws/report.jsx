@@ -33,7 +33,18 @@ function WithDrawReportPage() {
   const [loading, setLoading] = useState(false);
 
   const exportToPDF = () => {
+    // Save the current document title
+    const originalTitle = document.title;
+
+    // Set the document title to the custom title
+    document.title = `تقرير الصرفيات  - ${reportTitle} -  ${formatDate(
+      startFirstDate
+    )} - ${formatDate(endFirstDate)}.pdf`;
     window.print();
+
+    window.addEventListener("afterprint", () => {
+      document.title = originalTitle;
+    });
   };
 
   const pagination = paginationFactory({
@@ -113,6 +124,12 @@ function WithDrawReportPage() {
       filter: activeSearch ? textFilter() : null,
     },
     {
+      dataField: "out_to",
+      text: "الى",
+      sort: true,
+      filter: activeSearch ? textFilter() : null,
+    },
+    {
       dataField: "description",
       text: "التفاصيل",
       sort: true,
@@ -133,7 +150,7 @@ function WithDrawReportPage() {
     },
     {
       dataField: "withdraw_type",
-      text: "السيد",
+      text: "نوع القيد",
       sort: true,
       filter: activeSearch ? textFilter() : null,
     },
