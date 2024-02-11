@@ -16,6 +16,12 @@ function CompanyDetailsPage() {
   const [deposits, setDeposits] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
 
+  const [totalDepositsDinar, setTotalDepositsDinar] = useState(0);
+  const [totalDepositsDollar, setTotalDepositsDollar] = useState(0);
+
+  const [totalWithdrawsDinar, setTotalWithdrawsDinar] = useState(0);
+  const [totalWithdrawsDollar, setTotalWithdrawsDollar] = useState(0);
+
   async function loadDeposits() {
     setLoading(true);
     await fetch(SYSTEM_URL + "company_deposits/" + location.state.id, {
@@ -27,6 +33,18 @@ function CompanyDetailsPage() {
     })
       .then((response) => response.json())
       .then((data) => {
+        setTotalDepositsDinar(
+          data.reduce((accumulator, currentItem) => {
+            return accumulator + currentItem.price_in_dinar;
+          }, 0)
+        );
+
+        setTotalDepositsDollar(
+          data.reduce((accumulator, currentItem) => {
+            return accumulator + currentItem.price_in_dollar;
+          }, 0)
+        );
+
         console.log(data);
         data.map((i) => {
           i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
@@ -111,7 +129,7 @@ function CompanyDetailsPage() {
 
   const pagination = paginationFactory({
     page: 1,
-    sizePerPage: 15,
+    sizePerPage: 5,
     lastPageText: ">>",
     firstPageText: "<<",
     nextPageText: ">",
@@ -131,6 +149,17 @@ function CompanyDetailsPage() {
     })
       .then((response) => response.json())
       .then((data) => {
+        setTotalWithdrawsDinar(
+          data.reduce((accumulator, currentItem) => {
+            return accumulator + currentItem.price_in_dinar;
+          }, 0)
+        );
+
+        setTotalWithdrawsDollar(
+          data.reduce((accumulator, currentItem) => {
+            return accumulator + currentItem.price_in_dollar;
+          }, 0)
+        );
         data.map((i) => {
           i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
             style: "currency",
@@ -265,7 +294,33 @@ function CompanyDetailsPage() {
 
       <hr />
       <div className="container text-center">
-        <h1 className="text-success border rounded"> الادخالات</h1>
+        <h1 className="text-success "> الادخالات</h1>
+        <table className="table table-strpied table-hover ">
+          <tbody>
+            <tr>
+              <td className="text-end">
+                {totalDepositsDinar.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "IQD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td>مجموع الدينار</td>
+            </tr>
+            <tr>
+              <td className="text-end">
+                {totalDepositsDollar.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td>مجموع الدولار</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <BootstrapTable
         className="text-center"
@@ -279,9 +334,36 @@ function CompanyDetailsPage() {
         filter={filterFactory()}
         rowEvents={DepositsRowEvents}
       />
+
       <hr />
-      <div className="container text-center">
-        <h1 className="text-danger border rounded"> الصرفيات</h1>
+      <div className="container text-center  ">
+        <h1 className="text-danger "> الصرفيات</h1>
+        <table className="table table-strpied table-hover ">
+          <tbody>
+            <tr>
+              <td className="text-end">
+                {totalWithdrawsDinar.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "IQD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td>مجموع الدينار</td>
+            </tr>
+            <tr>
+              <td className="text-end">
+                {totalWithdrawsDollar.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td>مجموع الدولار</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <BootstrapTable
         className="text-center"
