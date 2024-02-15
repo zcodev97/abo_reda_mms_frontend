@@ -284,14 +284,54 @@ function ContainerDetailsPage() {
   return (
     <>
       <NavBar />
-      <div className="container text-center">
-        <h3> آسم القاصة</h3>
-        <h3>{location.state.name} </h3>
+      <div className="container text-center p-2 " style={{ fontSize: "24px" }}>
+        <h1 style={{ fontWeight: "bold" }}>{location.state.name} </h1>
+      </div>
+
+      <div className="container">
+        <table className="table table-sm  table-strpied text-center">
+          <thead>
+            <tr>
+              <td style={{ fontSize: "20px" }}>
+                {(totalDepositsDinar - totalWithdrawsDinar).toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "IQD",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }
+                )}
+              </td>
+              <td className="text-start" style={{ fontSize: "20px" }}>
+                ربح الدينار
+              </td>
+            </tr>
+            <tr>
+              <td style={{ fontSize: "20px" }}>
+                {" "}
+                {(totalDepositsDollar - totalWithdrawsDollar).toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2,
+                  }
+                )}
+              </td>
+              <td className="text-start" style={{ fontSize: "20px" }}>
+                {" "}
+                ربح الدولار{" "}
+              </td>
+            </tr>
+          </thead>
+        </table>
       </div>
 
       <hr />
       <div className="container text-center">
-        <h1 className="text-success "> الادخالات</h1>
+        <h1 className="text-success "> الايداعات</h1>
         <table className="table table-strpied table-hover ">
           <tbody>
             <tr>

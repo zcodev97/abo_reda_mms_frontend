@@ -69,6 +69,7 @@ function AddCompanyPage() {
         total_dinar: 0,
         total_dollar: 0,
         created_by: localStorage.getItem("user_id"),
+        supervisor: localStorage.getItem("user_id"),
       }),
     })
       .then((response) => {
