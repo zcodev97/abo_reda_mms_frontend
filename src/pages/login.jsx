@@ -64,6 +64,7 @@ function Login() {
           console.log(data);
 
           localStorage.setItem("company_id", data[0].id);
+          localStorage.setItem("company_name", data[0].title);
         })
         .catch((error) => {
           alert(error);

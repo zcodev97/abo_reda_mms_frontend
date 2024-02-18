@@ -192,7 +192,15 @@ function DepositsPage() {
   return (
     <>
       <NavBar />
-
+      {localStorage.getItem("user_type") === "supervisor" ? (
+        <>
+          <div className="container text-center">
+            <h3> {localStorage.getItem("company_name")}</h3>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
       <hr />
       <div className="container text-center">
         <h1 className="text-success"> الايداعات</h1>

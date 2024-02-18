@@ -133,22 +133,7 @@ function NavBar() {
           {/* Start of user/logout buttons */}
           <div>
             <ul className="navbar-nav">
-              <li
-                className="nav-item btn m-1 p-2 border border-1 rounded"
-                onClick={() => {
-                  navigate("/user_details", {
-                    state: {
-                      id: localStorage.getItem("id"),
-                      email: localStorage.getItem("email"),
-                      username: localStorage.getItem("username"),
-                      firstName: localStorage.getItem("firstName"),
-                      lastName: localStorage.getItem("lastName"),
-                      phoneNumber: localStorage.getItem("phoneNumber"),
-                      role: localStorage.getItem("role"),
-                    },
-                  });
-                }}
-              >
+              <li className="nav-item btn m-1 p-2 border border-1 rounded">
                 👤<b> {localStorage.getItem("username")}</b>
               </li>
               <li className="nav-item rounded m-1">
