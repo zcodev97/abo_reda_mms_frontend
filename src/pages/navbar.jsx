@@ -16,14 +16,9 @@ function NavBar() {
   async function handleLogout() {
     setLoading(true);
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("user_id");
-    localStorage.removeItem("email");
-    localStorage.removeItem("is_superuser");
+    localStorage.clear();
 
     setLoading(false);
-    // console.log(showNavBar);
     navigate("/login", { replace: true });
   }
 
@@ -64,7 +59,7 @@ function NavBar() {
                 <span className="navbar-toggler-icon"></span>
               </button>
 
-              {localStorage.getItem("is_superuser") === "true" ? (
+              {localStorage.getItem("user_type") === "admin" ? (
                 <div className="collapse navbar-collapse" id="navbarNav">
                   <ul className="navbar-nav">
                     <li className="nav-item rounded m-1">
@@ -77,6 +72,26 @@ function NavBar() {
                         <h5>الشركات</h5>
                       </Link>
                     </li>
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/withdraws">
+                        <h5>الصرفيات</h5>
+                      </Link>
+                    </li>
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/deposits">
+                        <h5>الايداعات</h5>
+                      </Link>
+                    </li>
+                    <li className="nav-item rounded border-4 m-1">
+                      <Link className={navLinkClassName} to="/withdraw_types">
+                        <h5> القيود</h5>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              ) : localStorage.getItem("user_type") === "supervisor" ? (
+                <div className="collapse navbar-collapse" id="navbarNav">
+                  <ul className="navbar-nav">
                     <li className="nav-item rounded border-4 m-1">
                       <Link className={navLinkClassName} to="/withdraws">
                         <h5>الصرفيات</h5>

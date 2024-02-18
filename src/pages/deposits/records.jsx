@@ -16,7 +16,7 @@ function DepositsPage() {
   const [deposits, setDeposits] = useState([]);
   const [withdraws, setWithdraws] = useState([]);
 
-  async function loadDeposits() {
+  async function loadAdminDeposits() {
     setLoading(true);
     await fetch(SYSTEM_URL + "deposits/", {
       method: "GET",
@@ -25,6 +25,49 @@ function DepositsPage() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
+      .then((response) => response.json())
+      .then((data) => {
+        data.map((i) => {
+          i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
+            style: "currency",
+            currency: "IQD",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+
+          i.price_in_dollar = i.price_in_dollar.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+
+          i.created_at = formatDate(new Date(i.created_at));
+          i.company_name = i.company_name.title;
+          i.container = i.container.name;
+        });
+        setDeposits(data);
+      })
+      .catch((error) => {
+        alert(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  async function loadDeposits() {
+    setLoading(true);
+    await fetch(
+      SYSTEM_URL + "company_deposits/" + localStorage.getItem("company_id"),
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
         data.map((i) => {
@@ -100,6 +143,12 @@ function DepositsPage() {
       filter: textFilter(),
     },
     {
+      dataField: "deposit_number",
+      text: "تسلسل",
+      sort: true,
+      filter: textFilter(),
+    },
+    {
       dataField: "invoice_id",
       text: "تسلسل السجل",
       sort: true,
@@ -136,7 +185,9 @@ function DepositsPage() {
   };
 
   useEffect(() => {
-    loadDeposits();
+    localStorage.getItem("user_type") === "supervisor"
+      ? loadDeposits()
+      : loadAdminDeposits();
   }, []);
   return (
     <>

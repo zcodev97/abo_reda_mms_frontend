@@ -45,7 +45,7 @@ function WithdrawsPage() {
     },
   };
 
-  async function loadWithdraws() {
+  async function loadAdminWithdraws() {
     setLoading(true);
     await fetch(SYSTEM_URL + "withdraws/", {
       method: "GET",
@@ -83,6 +83,49 @@ function WithdrawsPage() {
       });
     setLoading(false);
   }
+
+  async function loadWithdraws() {
+    setLoading(true);
+    await fetch(
+      SYSTEM_URL + "company_withdraws/" + localStorage.getItem("company_id"),
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        data.map((i) => {
+          i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
+            style: "currency",
+            currency: "IQD",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+
+          i.price_in_dollar = i.price_in_dollar.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          });
+
+          i.created_at = formatDate(new Date(i.created_at));
+          i.company_name = i.company_name.title;
+          i.container = i.container.name;
+          i.withdraw_type = i.withdraw_type.title;
+        });
+        setWithdraws(data);
+      })
+      .catch((error) => {
+        alert(error);
+      });
+    setLoading(false);
+  }
+
   const withdrawsColumns = [
     {
       dataField: "created_at",
@@ -134,6 +177,12 @@ function WithdrawsPage() {
       filter: textFilter(),
     },
     {
+      dataField: "withdraw_number",
+      text: "تسلسل ",
+      sort: true,
+      filter: textFilter(),
+    },
+    {
       dataField: "invoice_id",
       text: "تسلسل السجل",
       sort: true,
@@ -141,7 +190,9 @@ function WithdrawsPage() {
     },
   ];
   useEffect(() => {
-    loadWithdraws();
+    localStorage.getItem("user_type") === "supervisor"
+      ? loadWithdraws()
+      : loadAdminWithdraws();
   }, []);
   return (
     <>
