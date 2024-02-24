@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavBar from "../navbar";
 import { useNavigate } from "react-router-dom";
 import { SYSTEM_URL, formatDate } from "../../global";
@@ -10,6 +10,7 @@ import "react-clock/dist/Clock.css";
 function AddDepositPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [totalDinar, setTotalDinar] = useState(0);
   const [totalDollar, setTotalDollar] = useState(0);
@@ -91,23 +92,28 @@ function AddDepositPage() {
     if (window.confirm("هل انت متاكد ؟") == true) {
       setLoading(true);
 
+      const formData = new FormData();
+      formData.append("container", selectedContainer.value);
+      formData.append("company_name", selectedCompany.value);
+      formData.append("price_in_dinar", totalDinar);
+      formData.append("price_in_dollar", totalDollar);
+      formData.append("received_from", receivedFrom);
+      formData.append("description", description);
+      formData.append("created_by", localStorage.getItem("user_id"));
+      formData.append("created_at", formatDate(recordDate));
+
+      // Assuming you have a file input field with a ref attribute set to fileInputRef
+      // e.g., <input type="file" ref={fileInputRef} />
+      if (fileInputRef.current.files[0]) {
+        formData.append("document", fileInputRef.current.files[0]);
+      }
+
       fetch(SYSTEM_URL + "create_deposit/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-
-        body: JSON.stringify({
-          container: selectedContainer.value,
-          company_name: selectedCompany.value,
-          price_in_dinar: totalDinar,
-          price_in_dollar: totalDollar,
-          received_from: receivedFrom,
-          description: description,
-          created_by: localStorage.getItem("user_id"),
-          created_at: recordDate,
-        }),
+        body: formData,
       })
         .then((response) => {
           console.log(response.content);
@@ -309,6 +315,16 @@ function AddDepositPage() {
               </td>
               <td>
                 <b> تاريخ السجل </b>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div className="container border border-dark pt-2 pb-2 rounded">
+                  <input type="file" ref={fileInputRef} />
+                </div>
+              </td>
+              <td>
+                <b> الوصل </b>
               </td>
             </tr>
           </tbody>

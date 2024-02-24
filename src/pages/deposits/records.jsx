@@ -177,6 +177,7 @@ function DepositsPage() {
           price_in_dinar: row.price_in_dinar,
           price_in_dollar: row.price_in_dollar,
           description: row.description,
+          deposit_number: row.deposit_number,
           received_from: row.received_from,
           created_at: row.created_at,
         },
@@ -190,7 +191,7 @@ function DepositsPage() {
       : loadAdminDeposits();
   }, []);
   return (
-    <>
+    <div className="container-fluid">
       <NavBar />
       {localStorage.getItem("user_type") === "supervisor" ? (
         <>
@@ -223,19 +224,21 @@ function DepositsPage() {
           <b> تقرير </b>
         </div>
       </div>
-      <BootstrapTable
-        className="text-center"
-        hover={true}
-        bordered={true}
-        bootstrap4
-        keyField="id"
-        columns={depositsColumns}
-        data={deposits}
-        rowEvents={rowEvents}
-        pagination={pagination}
-        filter={filterFactory()}
-      />
-    </>
+      <div className="container-fluid" style={{ overflowX: "auto" }}>
+        <BootstrapTable
+          className="text-center"
+          hover={true}
+          bordered={true}
+          bootstrap4
+          keyField="id"
+          columns={depositsColumns}
+          data={deposits}
+          rowEvents={rowEvents}
+          pagination={pagination}
+          filter={filterFactory()}
+        />
+      </div>
+    </div>
   );
 }
 export default DepositsPage;

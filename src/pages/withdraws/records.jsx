@@ -38,6 +38,7 @@ function WithdrawsPage() {
           price_in_dollar: row.price_in_dollar,
           description: row.description,
           withdraw_type: row.withdraw_type,
+          withdraw_number: row.withdraw_number,
           created_at: row.created_at,
           out_to: row.out_to,
         },
@@ -228,18 +229,20 @@ function WithdrawsPage() {
           <b> تقرير </b>
         </div>
       </div>
-      <BootstrapTable
-        className="text-center"
-        hover={true}
-        bordered={true}
-        bootstrap4
-        keyField="id"
-        columns={withdrawsColumns}
-        data={withdraws}
-        pagination={pagination}
-        rowEvents={rowEvents}
-        filter={filterFactory()}
-      />
+      <div className="container-fluid" style={{ overflowX: "auto" }}>
+        <BootstrapTable
+          className="text-center"
+          hover={true}
+          bordered={true}
+          bootstrap4
+          keyField="id"
+          columns={withdrawsColumns}
+          data={withdraws}
+          pagination={pagination}
+          rowEvents={rowEvents}
+          filter={filterFactory()}
+        />
+      </div>
     </>
   );
 }

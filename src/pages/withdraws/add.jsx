@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavBar from "../navbar";
 import { useNavigate } from "react-router-dom";
 import { SYSTEM_URL, formatDate } from "../../global";
@@ -10,6 +10,7 @@ import "react-clock/dist/Clock.css";
 function AddWithdrawPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const [name, setName] = useState("");
   const [totalDinar, setTotalDinar] = useState(0);
@@ -126,24 +127,30 @@ function AddWithdrawPage() {
     if (window.confirm("هل انت متاكد ؟") == true) {
       setLoading(true);
 
+      const formData = new FormData();
+
+      formData.append("container", selectedContainer.value);
+      formData.append("company_name", selectedCompany.value);
+      formData.append("price_in_dinar", totalDinar);
+      formData.append("price_in_dollar", totalDollar);
+      formData.append("withdraw_type", selectedWithDrawType);
+      formData.append("description", description);
+      formData.append("out_to", outTo);
+      formData.append("created_by", localStorage.getItem("user_id"));
+      formData.append("created_at", formatDate(recordDate));
+
+      // Assuming you have a file input field with a ref attribute set to fileInputRef
+      // e.g., <input type="file" ref={fileInputRef} />
+      if (fileInputRef.current.files[0]) {
+        formData.append("document", fileInputRef.current.files[0]);
+      }
+
       fetch(SYSTEM_URL + "create_withdraw/", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-
-        body: JSON.stringify({
-          container: selectedContainer.value,
-          company_name: selectedCompany.value,
-          price_in_dinar: totalDinar,
-          price_in_dollar: totalDollar,
-          withdraw_type: selectedWithDrawType,
-          description: description,
-          out_to: outTo,
-          created_by: localStorage.getItem("user_id"),
-          created_at: recordDate,
-        }),
+        body: formData,
       })
         .then((response) => {
           console.log(response.content);
@@ -153,12 +160,11 @@ function AddWithdrawPage() {
           return {};
         })
         .then((data) => {
-          // console.log(data);
           alert("تم اضافة سجل ");
           navigate("/withdraws", { replace: true });
         })
         .catch((error) => {
-          // console.log(error);
+          console.log(error);
           alert(error + "😕");
         })
         .finally(() => {
@@ -168,6 +174,53 @@ function AddWithdrawPage() {
       alert("لقد الغيت عملية الأضافة");
     }
   }
+
+  // function addRecord() {
+  //   if (window.confirm("هل انت متاكد ؟") == true) {
+  //     setLoading(true);
+
+  //     fetch(SYSTEM_URL + "create_withdraw/", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+
+  //       body: JSON.stringify({
+  //         container: selectedContainer.value,
+  //         company_name: selectedCompany.value,
+  //         price_in_dinar: totalDinar,
+  //         price_in_dollar: totalDollar,
+  //         withdraw_type: selectedWithDrawType,
+  //         description: description,
+  //         out_to: outTo,
+  //         created_by: localStorage.getItem("user_id"),
+  //         created_at: recordDate,
+  //       }),
+  //     })
+  //       .then((response) => {
+  //         console.log(response.content);
+  //         if (response.status === 200) {
+  //           return response.json();
+  //         }
+  //         return {};
+  //       })
+  //       .then((data) => {
+  //         // console.log(data);
+  //         alert("تم اضافة سجل ");
+  //         navigate("/withdraws", { replace: true });
+  //       })
+  //       .catch((error) => {
+  //         // console.log(error);
+  //         alert(error + "😕");
+  //       })
+  //       .finally(() => {
+  //         setLoading(false);
+  //       });
+  //   } else {
+  //     alert("لقد الغيت عملية الأضافة");
+  //   }
+  // }
 
   useEffect(() => {
     loadContainers();
@@ -185,7 +238,10 @@ function AddWithdrawPage() {
             <b> اضافة صرف</b>
           </h2>
         </div>
-        <table className="table table-bordered table-striped table-hover">
+        <table
+          className="table table-bordered table-striped table-hover"
+          style={{ tableLayout: "auto", overflowX: "auto" }}
+        >
           <thead>
             <tr>
               <td className="text-light bg-dark">
@@ -365,6 +421,16 @@ function AddWithdrawPage() {
               </td>
               <td>
                 <b> تاريخ السجل </b>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div className="container border border-dark pt-2 pb-2 rounded">
+                  <input type="file" ref={fileInputRef} />
+                </div>
+              </td>
+              <td>
+                <b> الوصل </b>
               </td>
             </tr>
           </tbody>

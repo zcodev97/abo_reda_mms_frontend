@@ -126,6 +126,20 @@ function DepositDetailsPage() {
             <td></td> <td></td> <td></td>{" "}
             <td className="text-end">
               {" "}
+              <h4> {location.state.deposit_number} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> تسلسل السند</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
               <h4> {location.state.received_from} </h4>
             </td>
             <td className="text-end">

@@ -362,19 +362,20 @@ function CompanyDetailsPage() {
           </tbody>
         </table>
       </div>
-      <BootstrapTable
-        className="text-center"
-        hover={true}
-        bordered={true}
-        bootstrap4
-        keyField="id"
-        columns={depositsColumns}
-        data={deposits}
-        pagination={pagination}
-        filter={filterFactory()}
-        rowEvents={DepositsRowEvents}
-      />
-
+      <div className="container-fluid" style={{ overflowX: "auto" }}>
+        <BootstrapTable
+          className="text-center"
+          hover={true}
+          bordered={true}
+          bootstrap4
+          keyField="id"
+          columns={depositsColumns}
+          data={deposits}
+          pagination={pagination}
+          filter={filterFactory()}
+          rowEvents={DepositsRowEvents}
+        />
+      </div>
       <hr />
       <div className="container text-center  ">
         <h1 className="text-danger "> الصرفيات</h1>
@@ -405,18 +406,20 @@ function CompanyDetailsPage() {
           </tbody>
         </table>
       </div>
-      <BootstrapTable
-        className="text-center"
-        hover={true}
-        bordered={true}
-        bootstrap4
-        keyField="id"
-        columns={withdrawsColumns}
-        data={withdraws}
-        pagination={pagination}
-        rowEvents={WithdrawRrowEvents}
-        filter={filterFactory()}
-      />
+      <div className="container-fluid" style={{ overflowX: "auto" }}>
+        <BootstrapTable
+          className="text-center"
+          hover={true}
+          bordered={true}
+          bootstrap4
+          keyField="id"
+          columns={withdrawsColumns}
+          data={withdraws}
+          pagination={pagination}
+          rowEvents={WithdrawRrowEvents}
+          filter={filterFactory()}
+        />
+      </div>
     </>
   );
 }

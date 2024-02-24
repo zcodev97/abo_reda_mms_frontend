@@ -33,100 +33,80 @@ function NavBar() {
   return (
     <>
       <nav
-        className="navbar navbar-expand-sm navbar-dark rounded p-2"
+        className="navbar text-center navbar-expand-sm navbar-dark rounded p-2"
         id="no-print"
       >
-        <div className="container-fluid d-flex justify-content-between">
+        <div className="container-fluid d-flex justify-content-between text-center">
           {/* Start of the main navbar content */}
           <div>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <a className="navbar-brand text-primary p-2">
-                <Link className="nav-link text-primary" to="/containers">
-                  <h3>
-                    <b>حساباتي</b>
-                  </h3>
-                </Link>
-              </a>
-              <button
-                className="navbar-toggler bg-dark"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-              >
-                <span className="navbar-toggler-icon"></span>
-              </button>
+            {localStorage.getItem("user_type") === "admin" ? (
+              <ul className="navbar-nav text-center">
+                <li className="nav-item rounded m-1">
+                  <Link className="nav-link text-primary" to="/containers">
+                    <h3>
+                      <b>حساباتي</b>
+                    </h3>
+                  </Link>
+                </li>
+                <li className="nav-item rounded m-1">
+                  <Link className={navLinkClassName} to="/containers">
+                    <h5>القاصات</h5>
+                  </Link>
+                </li>
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/companies">
+                    <h5>الشركات</h5>
+                  </Link>
+                </li>
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/withdraws">
+                    <h5>الصرفيات</h5>
+                  </Link>
+                </li>
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/deposits">
+                    <h5>الايداعات</h5>
+                  </Link>
+                </li>
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/withdraw_types">
+                    <h5> القيود</h5>
+                  </Link>
+                </li>
+              </ul>
+            ) : localStorage.getItem("user_type") === "supervisor" ? (
+              <ul className="navbar-nav">
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/withdraws">
+                    <h5>الصرفيات</h5>
+                  </Link>
+                </li>
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/deposits">
+                    <h5>الايداعات</h5>
+                  </Link>
+                </li>
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/withdraw_types">
+                    <h5> القيود</h5>
+                  </Link>
+                </li>
+              </ul>
+            ) : (
+              <ul className="navbar-nav">
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/withdraws">
+                    <h5>الصرفيات</h5>
+                  </Link>
+                </li>
 
-              {localStorage.getItem("user_type") === "admin" ? (
-                <div className="collapse navbar-collapse" id="navbarNav">
-                  <ul className="navbar-nav">
-                    <li className="nav-item rounded m-1">
-                      <Link className={navLinkClassName} to="/containers">
-                        <h5>القاصات</h5>
-                      </Link>
-                    </li>
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/companies">
-                        <h5>الشركات</h5>
-                      </Link>
-                    </li>
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/withdraws">
-                        <h5>الصرفيات</h5>
-                      </Link>
-                    </li>
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/deposits">
-                        <h5>الايداعات</h5>
-                      </Link>
-                    </li>
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/withdraw_types">
-                        <h5> القيود</h5>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              ) : localStorage.getItem("user_type") === "supervisor" ? (
-                <div className="collapse navbar-collapse" id="navbarNav">
-                  <ul className="navbar-nav">
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/withdraws">
-                        <h5>الصرفيات</h5>
-                      </Link>
-                    </li>
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/deposits">
-                        <h5>الايداعات</h5>
-                      </Link>
-                    </li>
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/withdraw_types">
-                        <h5> القيود</h5>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              ) : (
-                <div className="collapse navbar-collapse" id="navbarNav">
-                  <ul className="navbar-nav">
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/withdraws">
-                        <h5>الصرفيات</h5>
-                      </Link>
-                    </li>
-
-                    <li className="nav-item rounded border-4 m-1">
-                      <Link className={navLinkClassName} to="/withdraw_types">
-                        <h5> القيود</h5>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
+                <li className="nav-item rounded border-4 m-1">
+                  <Link className={navLinkClassName} to="/withdraw_types">
+                    <h5> القيود</h5>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
           {/* End of the main navbar content */}
 

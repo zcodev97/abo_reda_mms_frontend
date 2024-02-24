@@ -127,6 +127,20 @@ function WithDrawDetialsPage() {
             <td></td> <td></td> <td></td>{" "}
             <td className="text-end">
               {" "}
+              <h4> {location.state.withdraw_number} </h4>
+            </td>
+            <td className="text-end">
+              {" "}
+              <h4>
+                {" "}
+                <b> تسلسل السند</b>{" "}
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td></td> <td></td> <td></td>{" "}
+            <td className="text-end">
+              {" "}
               <h4> {location.state.withdraw_type} </h4>
             </td>
             <td className="text-end">

@@ -1,16 +1,14 @@
-#loginPage
-{
-  background: linear-gradient(to bottom, #0000FF, #54BCBD)
-
+#loginPage {
+  background: linear-gradient(to bottom, #0000ff, #54bcbd);
 }
 
-.sr-only{
+.sr-only {
   display: none;
 }
 
 .react-bootstrap-table table {
   table-layout: auto !important;
-   text-align: center;
+  text-align: center;
 }
 .table thead th {
   vertical-align: bottom;
@@ -20,17 +18,16 @@
   font-weight: bold;
 }
 
-
 /* for print */
 @media print {
   @page {
     size: landscape;
   }
-  
+
   body {
     width: 100%;
   }
-  
+
   #no-print {
     display: none;
   }
