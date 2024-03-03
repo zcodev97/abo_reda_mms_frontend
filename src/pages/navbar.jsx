@@ -48,13 +48,6 @@ function NavBar() {
         >
           {/* Start of the main navbar content */}
           <div className="contaier-fluid">
-            <Link
-              className="navbar-brand text-primary p-2"
-              to="/containers"
-              style={{ alignItems: "start" }}
-            >
-              حساباتي
-            </Link>
             <button
               className="navbar-toggler bg-dark text-end"
               type="button"
