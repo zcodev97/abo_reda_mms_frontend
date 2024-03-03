@@ -32,55 +32,6 @@ function DepositsReportPage() {
 
   const [loading, setLoading] = useState(false);
 
-  // function exportToPDF() {
-  //   const pdf = new jsPDF("landscape");
-
-  //   const input = tableRef.current;
-  //   html2canvas(input, { scale: 5.0 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/jpeg", 20); // JPEG format with quality 0.75
-
-  //     const pdf = new jsPDF({
-  //       orientation: "landscape", // Set orientation to landscape
-  //       unit: "mm", // Use millimeters as the unit for dimensions
-  //       format: "a4", // Use A4 size paper
-  //     });
-
-  //     const imgProps = pdf.getImageProperties(imgData);
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-  //     // Define margin values
-  //     const marginLeft = 2; // Left margin in mm
-  //     const marginRight = 2; // Right margin in mm
-  //     const marginTop = 5; // Top margin in mm
-  //     const marginBottom = 5; // Bottom margin in mm
-
-  //     // Calculate the adjusted width and height with margins
-  //     const adjustedWidth = pdfWidth - marginLeft - marginRight;
-  //     const adjustedHeight = pdfHeight - marginTop - marginBottom;
-
-  //     // Calculate the x and y positions to center the adjusted table
-  //     const xPosition =
-  //       marginLeft + (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
-  //     const yPosition =
-  //       marginTop + (pdf.internal.pageSize.getHeight() - pdfHeight) / 8;
-
-  //     pdf.addImage(
-  //       imgData,
-  //       "jpeg",
-  //       xPosition,
-  //       yPosition,
-  //       adjustedWidth,
-  //       adjustedHeight
-  //     );
-  //     pdf.save(
-  //       `تقرير الادخالات   - ${reportTitle} -  ${formatDate(
-  //         startFirstDate
-  //       )} - ${formatDate(endFirstDate)}.pdf`
-  //     );
-  //   });
-  // }
-
   const exportToPDF = () => {
     window.print();
   };
@@ -167,61 +118,67 @@ function DepositsReportPage() {
       });
     setLoading(false);
   }
-  const withdrawsColumns = [
+  const depositsColumns = [
     {
       dataField: "created_at",
       text: "تاريخ الانشاء",
       sort: true,
-      filter: activeSearch ? textFilter() : null,
+      filter: textFilter(),
+    },
+    {
+      dataField: "received_from",
+      text: "استلام من",
+      sort: true,
+      filter: textFilter(),
     },
     {
       dataField: "description",
       text: "التفاصيل",
       sort: true,
-      filter: activeSearch ? textFilter() : null,
+      filter: textFilter(),
     },
     {
       dataField: "price_in_dollar",
       text: "مبلغ الدولار",
       sort: true,
-      filter: activeSearch ? textFilter({}) : null,
+      filter: textFilter(),
     },
 
     {
       dataField: "price_in_dinar",
       text: "مبلغ الدينار",
       sort: true,
-      filter: activeSearch ? textFilter() : null,
-    },
-    {
-      dataField: "received_from",
-      text: "استلام من",
-      sort: true,
-      filter: activeSearch ? textFilter() : null,
+      filter: textFilter(),
     },
     {
       dataField: "company_name",
       text: "اسم الشركة",
       sort: true,
-      filter: activeSearch ? textFilter() : null,
+      filter: textFilter(),
     },
     {
       dataField: "container",
       text: "القاصة",
       sort: true,
-      filter: activeSearch ? textFilter() : null,
+      filter: textFilter(),
+    },
+    {
+      dataField: "deposit_number",
+      text: "تسلسل",
+      sort: true,
+      filter: textFilter(),
     },
     {
       dataField: "invoice_id",
       text: "تسلسل السجل",
       sort: true,
-      filter: activeSearch ? textFilter() : null,
+      filter: textFilter(),
     },
   ];
 
   const pagination = paginationFactory({
     page: 1,
-    sizePerPage: 25,
+    sizePerPage: 10000,
     lastPageText: ">>",
     firstPageText: "<<",
     nextPageText: ">",
@@ -238,82 +195,96 @@ function DepositsReportPage() {
     <>
       <NavBar />
 
-      <div className="container-fluid p-2 mt-2  text-dark ">
-        <h3 className="text-center" id="test">
-          <b> تقرير الايداعات </b>
-        </h3>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="container-fluid p-2 mt-2  border-primary text-dark rounded ">
+          <h3 className="text-center" id="test">
+            <b> تقرير الايداعات </b>
+          </h3>
 
-        <div className="container text-end" id="no-print">
-          <btn
-            className="btn btn-primary text-light "
-            onClick={() => {
-              setActiveSearch(!activeSearch);
+          <div className="container text-center" id="no-print">
+            <btn
+              className="btn btn-primary text-light "
+              onClick={() => {
+                setActiveSearch(!activeSearch);
+              }}
+            >
+              <b> {activeSearch ? "اخفاء" : "تفعيل"} البحث</b>
+            </btn>
+          </div>
+
+          <div
+            className="container"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <b> تفعيل البحث</b>
-          </btn>
-        </div>
+            <DateTimePicker
+              key={1}
+              clearIcon={null}
+              format={"y-MM-dd"}
+              onChange={setStartFirstDate}
+              value={startFirstDate}
+            />
 
-        <div className="container  p-4 mt-2 mb-2 ">
-          <table className="table">
-            <thead>
-              <tr>
-                <td>
-                  <div
-                    className="container btn border border-2  border-danger text-danger  text-center"
-                    onClick={exportToPDF}
-                    id="no-print"
-                  >
-                    <b> طباعة 📁 </b>
-                  </div>
-                </td>
-                <td>
-                  <div
-                    className="container btn btn-light border border-2 border-primary text-primary"
-                    onClick={loadDeposits}
-                    id="no-print"
-                  >
-                    <b> تنفيذ </b>
-                  </div>
-                </td>
-                <td>
-                  <div className="container  text-end ">
-                    <DateTimePicker
-                      key={2}
-                      clearIcon={null}
-                      format={"y-MM-dd"}
-                      onChange={setEndFirstDate}
-                      value={endFirstDate}
-                    />
-                  </div>
-                </td>
-                <td>الى</td>
-                <td>
-                  <div className="container  text-end ">
-                    <DateTimePicker
-                      key={1}
-                      clearIcon={null}
-                      format={"y-MM-dd"}
-                      onChange={setStartFirstDate}
-                      value={startFirstDate}
-                    />
-                  </div>
-                </td>
-                <td>من</td>
-              </tr>
-            </thead>
-          </table>
-        </div>
-        <div className="container">
+            <div className="p-3 text-center"> من</div>
+          </div>
+
           <div
-            className="table-responsive table-strpied "
-            id="mytable"
-            ref={tableRef}
+            className="container"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
+            <DateTimePicker
+              key={2}
+              clearIcon={null}
+              format={"y-MM-dd"}
+              onChange={setEndFirstDate}
+              value={endFirstDate}
+            />
+
+            <div className="p-3 text-center"> الى</div>
+          </div>
+
+          <div className="container text-center">
+            <div
+              className="mt-2 mb-2 btn btn-light border border-2 border-primary text-primary"
+              onClick={() => {
+                loadDeposits();
+              }}
+              id="no-print"
+            >
+              <b> تنفيذ </b>
+            </div>
+            <br />
+            <div
+              className="btn border border-2  border-danger text-danger  text-center"
+              onClick={() => {
+                console.log(reportTitle.length);
+                if (reportTitle.length === 0) {
+                  alert("الرجاء ادخال عنوان للتقرير ");
+                  return;
+                }
+                exportToPDF();
+              }}
+              id="no-print"
+            >
+              <b> طباعة 📁 </b>
+            </div>
+          </div>
+
+          <div className="table" id="mytable" ref={tableRef}>
             <div
               className="container text-center p-2"
-              style={{ marginTop: "30px" }}
+              style={{ marginTop: "20px" }}
             >
+              <p>عنوان التقرير</p>
               <input
                 onChange={(e) => {
                   setReportTitle(e.target.value);
@@ -328,10 +299,7 @@ function DepositsReportPage() {
                 dir="rtl"
               />
             </div>
-            <div
-              className="container-fluid"
-              style={{ height: 500, overflow: "auto" }}
-            >
+            <div className="container-fluid" style={{ overflowX: "auto" }}>
               <BootstrapTable
                 className="text-center"
                 hover={true}
@@ -339,13 +307,14 @@ function DepositsReportPage() {
                 striped={true}
                 bootstrap4
                 keyField="id"
-                columns={withdrawsColumns}
+                columns={depositsColumns}
                 data={data}
+                // rowEvents={rowEvents}
                 pagination={pagination}
                 filter={filterFactory({ afterFilter })}
               />
               <div className="container text-center">
-                <table className="table table-strpied table-hover table-bordered">
+                <table className="table table-hover">
                   <tbody>
                     <tr>
                       <td>
@@ -373,31 +342,27 @@ function DepositsReportPage() {
                 </table>
               </div>
             </div>
-
-            <table className="table table-strpied">
-              <tbody>
-                <br /> <br /> <br /> <br /> <br /> <br /> <br />
-                <br /> <br /> <br />
-                <tr>
-                  <td></td>
-                  <td>
-                    <h4> التدقيق </h4>
-                  </td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-
-                  <td className="text-end">
-                    <h4> الحسابات </h4>
-                  </td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
           </div>
+
+          <footer className="footer">
+            <div
+              className="container text-center"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div className="container text-start">
+                <h4> التدقيق </h4>
+              </div>
+              <div className="container text-end">
+                <h4> الحسابات </h4>
+              </div>
+            </div>
+          </footer>
         </div>
-      </div>
+      )}
     </>
   );
 }

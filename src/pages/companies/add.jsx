@@ -197,7 +197,21 @@ function AddCompanyPage() {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="btn btn-success p-2 mt-2 mb-2" onClick={addCompany}>
+            <div
+              className="btn btn-success p-2 mt-2 mb-2"
+              onClick={() => {
+                if (name.length === 0) {
+                  alert("الرجاء ادخال الاسم !");
+                  return;
+                }
+
+                if (Object.entries(selectedContainer).length === 0) {
+                  alert("أسم القاصة !");
+                  return;
+                }
+                addCompany();
+              }}
+            >
               <h4> حفظ القيد</h4>
             </div>
           </div>

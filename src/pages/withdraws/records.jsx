@@ -8,6 +8,7 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
+import Loading from "../loading";
 
 function WithdrawsPage() {
   const location = useLocation();
@@ -198,51 +199,58 @@ function WithdrawsPage() {
   return (
     <>
       <NavBar />
-      {localStorage.getItem("user_type") === "supervisor" ? (
+      {loading ? (
+        <Loading />
+      ) : (
         <>
+          {localStorage.getItem("user_type") === "supervisor" ? (
+            <div className="container text-center">
+              <h3> {localStorage.getItem("company_name")}</h3>
+            </div>
+          ) : (
+            ""
+          )}
+
           <div className="container text-center">
-            <h3> {localStorage.getItem("company_name")}</h3>
+            <h1 className="text-danger "> الصرفيات</h1>
+          </div>
+          <div className="container text-center">
+            <div
+              className="btn btn-primary m-2"
+              onClick={() => {
+                navigate("/add_withdraw");
+              }}
+            >
+              <b> اضافة</b>
+            </div>
+            <div
+              className="btn btn-success m-2"
+              onClick={() => {
+                navigate("/withdraw_report");
+              }}
+            >
+              <b> تقرير </b>
+            </div>
+          </div>
+          <div
+            className="container-fluid"
+            style={{ margin: "0px", padding: "0px", overflowX: "auto" }}
+          >
+            <BootstrapTable
+              className="text-center"
+              hover={true}
+              bordered={true}
+              bootstrap4
+              keyField="id"
+              columns={withdrawsColumns}
+              data={withdraws}
+              pagination={pagination}
+              rowEvents={rowEvents}
+              filter={filterFactory()}
+            />
           </div>
         </>
-      ) : (
-        <></>
       )}
-      <hr />
-      <div className="container text-center">
-        <h1 className="text-danger "> الصرفيات</h1>
-      </div>
-      <div className="container text-center">
-        <div
-          className="btn btn-primary m-2"
-          onClick={() => {
-            navigate("/add_withdraw");
-          }}
-        >
-          <b> اضافة</b>
-        </div>
-        <div
-          className="btn btn-success m-2"
-          onClick={() => {
-            navigate("/withdraw_report");
-          }}
-        >
-          <b> تقرير </b>
-        </div>
-      </div>
-      <div className="container-fluid" style={{ overflowX: "auto" }}>
-        <BootstrapTable
-          className="text-center"
-          hover={true}
-          bordered={true}
-          bootstrap4
-          keyField="id"
-          columns={withdrawsColumns}
-          data={withdraws}
-          pagination={pagination}
-          rowEvents={rowEvents}
-          filter={filterFactory()}
-        />
-      </div>
     </>
   );
 }

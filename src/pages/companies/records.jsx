@@ -119,7 +119,10 @@ function CompaniesPage() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="container-fluid p-4 text-end">
+        <div
+          className="container-fluid"
+          style={{ margin: "0px", padding: "0px" }}
+        >
           <div className="container text-center ">
             <h1> الشركات</h1>
           </div>

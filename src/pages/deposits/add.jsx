@@ -341,7 +341,43 @@ function AddDepositPage() {
             </div>
           </div>
           <div className="col-md-6">
-            <div className="btn btn-success p-2 mt-2 mb-2" onClick={addRecord}>
+            <div
+              className="btn btn-success p-2 mt-2 mb-2"
+              onClick={() => {
+                if (receivedFrom.length === 0) {
+                  alert("الرجاء ادخال من اي شخص استملت المبلغ !");
+                  return;
+                }
+                if (totalDinar.length === 0) {
+                  alert("الرجاء ادخال مبلغ الدينار !");
+                  return;
+                }
+                if (totalDollar.length === 0) {
+                  alert("الرجاء ادخال مبلغ الدولار !");
+                  return;
+                }
+
+                if (totalDollar.length === 0) {
+                  alert("الرجاء ادخال مبلغ الدولار !");
+                  return;
+                }
+                if (Object.entries(selectedCompany).length === 0) {
+                  alert("الرجاء ادخال اسم المشروع !");
+                  return;
+                }
+                if (Object.entries(selectedContainer).length === 0) {
+                  alert("أسم القاصة !");
+                  return;
+                }
+
+                if (description.length === 0) {
+                  alert("الرجاء ادخال التفاصيل !");
+                  return;
+                }
+
+                addRecord();
+              }}
+            >
               <h4> حفظ القيد</h4>
             </div>
           </div>

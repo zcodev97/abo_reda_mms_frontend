@@ -109,7 +109,14 @@ function AddPersonTypePage() {
           <div className="col-md-6">
             <div
               className="btn btn-success p-2 mt-2 mb-2"
-              onClick={addPersonType}
+              onClick={() => {
+                if (name.length === 0) {
+                  alert("الرجاء ادخال الاسم !");
+                  return;
+                }
+
+                addPersonType();
+              }}
             >
               <h4> حفظ القيد</h4>
             </div>

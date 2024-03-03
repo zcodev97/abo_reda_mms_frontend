@@ -8,6 +8,7 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
+import Loading from "../loading";
 
 function DepositsPage() {
   const location = useLocation();
@@ -191,54 +192,67 @@ function DepositsPage() {
       : loadAdminDeposits();
   }, []);
   return (
-    <div className="container-fluid">
+    <>
       <NavBar />
-      {localStorage.getItem("user_type") === "supervisor" ? (
-        <>
-          <div className="container text-center">
-            <h3> {localStorage.getItem("company_name")}</h3>
-          </div>
-        </>
+
+      {loading ? (
+        <Loading />
       ) : (
-        <></>
+        <div
+          className="container-fluid"
+          style={{ margin: "0px", padding: "0px", overflowX: "auto" }}
+        >
+          {localStorage.getItem("user_type") === "supervisor" ? (
+            <>
+              <div className="container text-center">
+                <h3> {localStorage.getItem("company_name")}</h3>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+          <hr />
+          <div className="container text-center">
+            <h1 className="text-success"> الايداعات</h1>
+          </div>
+          <div className="container text-center">
+            <div
+              className="btn btn-primary m-2"
+              onClick={() => {
+                navigate("/add_deposit");
+              }}
+            >
+              <b> اضافة</b>
+            </div>
+            <div
+              className="btn btn-success m-2"
+              onClick={() => {
+                navigate("/deposits_report");
+              }}
+            >
+              <b> تقرير </b>
+            </div>
+          </div>
+          <div
+            className="container-fluid"
+            style={{ margin: "0px", padding: "0px", overflowX: "auto" }}
+          >
+            <BootstrapTable
+              className="text-center"
+              hover={true}
+              bordered={true}
+              bootstrap4
+              keyField="id"
+              columns={depositsColumns}
+              data={deposits}
+              rowEvents={rowEvents}
+              pagination={pagination}
+              filter={filterFactory()}
+            />
+          </div>
+        </div>
       )}
-      <hr />
-      <div className="container text-center">
-        <h1 className="text-success"> الايداعات</h1>
-      </div>
-      <div className="container text-center">
-        <div
-          className="btn btn-primary m-2"
-          onClick={() => {
-            navigate("/add_deposit");
-          }}
-        >
-          <b> اضافة</b>
-        </div>
-        <div
-          className="btn btn-success m-2"
-          onClick={() => {
-            navigate("/deposits_report");
-          }}
-        >
-          <b> تقرير </b>
-        </div>
-      </div>
-      <div className="container-fluid" style={{ overflowX: "auto" }}>
-        <BootstrapTable
-          className="text-center"
-          hover={true}
-          bordered={true}
-          bootstrap4
-          keyField="id"
-          columns={depositsColumns}
-          data={deposits}
-          rowEvents={rowEvents}
-          pagination={pagination}
-          filter={filterFactory()}
-        />
-      </div>
-    </div>
+    </>
   );
 }
 export default DepositsPage;

@@ -139,7 +139,13 @@ function AddContainerPage() {
           <div className="col-md-6">
             <div
               className="btn btn-success p-2 mt-2 mb-2"
-              onClick={addContainer}
+              onClick={() => {
+                if (containerName.length === 0) {
+                  alert("أسم القاصة !");
+                  return;
+                }
+                addContainer();
+              }}
             >
               <h4> حفظ القيد</h4>
             </div>

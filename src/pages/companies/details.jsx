@@ -8,6 +8,7 @@ import "react-bootstrap-table-next/dist/react-bootstrap-table2.css";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
+import Loading from "../loading";
 
 function CompanyDetailsPage() {
   const location = useLocation();
@@ -45,7 +46,7 @@ function CompanyDetailsPage() {
           }, 0)
         );
 
-        console.log(data);
+        // console.log(data);
         data.map((i) => {
           i.price_in_dinar = i.price_in_dinar.toLocaleString("en-US", {
             style: "currency",
@@ -287,139 +288,148 @@ function CompanyDetailsPage() {
   return (
     <>
       <NavBar />
-      <div className="container text-center p-2 " style={{ fontSize: "24px" }}>
-        <h1 style={{ fontWeight: "bold" }}>{location.state.name} </h1>
-      </div>
 
-      <div className="container">
-        <table className="table table-sm  text-center">
-          <thead>
-            <tr>
-              <td style={{ fontSize: "20px" }}>
-                {(totalDepositsDinar - totalWithdrawsDinar).toLocaleString(
-                  "en-US",
-                  {
-                    style: "currency",
-                    currency: "IQD",
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                  }
-                )}
-              </td>
-              <td className="text-start" style={{ fontSize: "20px" }}>
-                ربح الدينار
-              </td>
-            </tr>
-            <tr>
-              <td style={{ fontSize: "20px" }}>
-                {" "}
-                {(totalDepositsDollar - totalWithdrawsDollar).toLocaleString(
-                  "en-US",
-                  {
-                    style: "currency",
-                    currency: "USD",
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2,
-                  }
-                )}
-              </td>
-              <td className="text-start" style={{ fontSize: "20px" }}>
-                {" "}
-                ربح الدولار{" "}
-              </td>
-            </tr>
-          </thead>
-        </table>
-      </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <div
+            className="container text-center p-2 "
+            style={{ fontSize: "24px" }}
+          >
+            <h1 style={{ fontWeight: "bold" }}>{location.state.name} </h1>
+          </div>
 
-      <hr />
-      <div className="container text-center">
-        <h1 className="text-success "> الايداعات</h1>
-        <table className="table table-strpied table-hover ">
-          <tbody>
-            <tr>
-              <td className="text-end">
-                {totalDepositsDinar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "IQD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدينار</td>
-            </tr>
-            <tr>
-              <td className="text-end">
-                {totalDepositsDollar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدولار</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div className="container-fluid" style={{ overflowX: "auto" }}>
-        <BootstrapTable
-          className="text-center"
-          hover={true}
-          bordered={true}
-          bootstrap4
-          keyField="id"
-          columns={depositsColumns}
-          data={deposits}
-          pagination={pagination}
-          filter={filterFactory()}
-          rowEvents={DepositsRowEvents}
-        />
-      </div>
-      <hr />
-      <div className="container text-center  ">
-        <h1 className="text-danger "> الصرفيات</h1>
-        <table className="table table-strpied table-hover ">
-          <tbody>
-            <tr>
-              <td className="text-end">
-                {totalWithdrawsDinar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "IQD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدينار</td>
-            </tr>
-            <tr>
-              <td className="text-end">
-                {totalWithdrawsDollar.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 2,
-                })}
-              </td>
-              <td>مجموع الدولار</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div className="container-fluid" style={{ overflowX: "auto" }}>
-        <BootstrapTable
-          className="text-center"
-          hover={true}
-          bordered={true}
-          bootstrap4
-          keyField="id"
-          columns={withdrawsColumns}
-          data={withdraws}
-          pagination={pagination}
-          rowEvents={WithdrawRrowEvents}
-          filter={filterFactory()}
-        />
-      </div>
+          <div className="container">
+            <table className="table table-sm  text-center">
+              <thead>
+                <tr>
+                  <td style={{ fontSize: "20px" }}>
+                    {(totalDepositsDinar - totalWithdrawsDinar).toLocaleString(
+                      "en-US",
+                      {
+                        style: "currency",
+                        currency: "IQD",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      }
+                    )}
+                  </td>
+                  <td className="text-start" style={{ fontSize: "20px" }}>
+                    ربح الدينار
+                  </td>
+                </tr>
+                <tr>
+                  <td style={{ fontSize: "20px" }}>
+                    {" "}
+                    {(
+                      totalDepositsDollar - totalWithdrawsDollar
+                    ).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td className="text-start" style={{ fontSize: "20px" }}>
+                    {" "}
+                    ربح الدولار{" "}
+                  </td>
+                </tr>
+              </thead>
+            </table>
+          </div>
+
+          <hr />
+          <div className="container text-center">
+            <h1 className="text-success "> الايداعات</h1>
+            <table className="table table-strpied table-hover ">
+              <tbody>
+                <tr>
+                  <td className="text-end">
+                    {totalDepositsDinar.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "IQD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>مجموع الدينار</td>
+                </tr>
+                <tr>
+                  <td className="text-end">
+                    {totalDepositsDollar.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>مجموع الدولار</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="container-fluid" style={{ overflowX: "auto" }}>
+            <BootstrapTable
+              className="text-center"
+              hover={true}
+              bordered={true}
+              bootstrap4
+              keyField="id"
+              columns={depositsColumns}
+              data={deposits}
+              pagination={pagination}
+              filter={filterFactory()}
+              rowEvents={DepositsRowEvents}
+            />
+          </div>
+          <hr />
+          <div className="container text-center  ">
+            <h1 className="text-danger "> الصرفيات</h1>
+            <table className="table table-strpied table-hover ">
+              <tbody>
+                <tr>
+                  <td className="text-end">
+                    {totalWithdrawsDinar.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "IQD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>مجموع الدينار</td>
+                </tr>
+                <tr>
+                  <td className="text-end">
+                    {totalWithdrawsDollar.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </td>
+                  <td>مجموع الدولار</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="container-fluid" style={{ overflowX: "auto" }}>
+            <BootstrapTable
+              className="text-center"
+              hover={true}
+              bordered={true}
+              bootstrap4
+              keyField="id"
+              columns={withdrawsColumns}
+              data={withdraws}
+              pagination={pagination}
+              rowEvents={WithdrawRrowEvents}
+              filter={filterFactory()}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 }
