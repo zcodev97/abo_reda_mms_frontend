@@ -95,6 +95,18 @@ function NavBar() {
                     <h5> القيود</h5>
                   </Link>
                 </li>
+                <li className="nav-item btn m-1 p-2 border border-1 rounded">
+                  👤<b> {localStorage.getItem("username")}</b>
+                </li>
+                <li className="nav-item rounded m-1">
+                  <Link
+                    className="nav-link text-light bg-danger rounded p-2 border border-3 border-danger"
+                    to="/login"
+                    onClick={handleLogout}
+                  >
+                    <b>خروج</b>
+                  </Link>
+                </li>
               </ul>
             ) : localStorage.getItem("user_type") === "supervisor" ? (
               <ul className="navbar-nav">
@@ -113,6 +125,18 @@ function NavBar() {
                     <h5> القيود</h5>
                   </Link>
                 </li>
+                <li className="nav-item btn m-1 p-2 border border-1 rounded">
+                  👤<b> {localStorage.getItem("username")}</b>
+                </li>
+                <li className="nav-item rounded m-1">
+                  <Link
+                    className="nav-link text-light bg-danger rounded p-2 border border-3 border-danger"
+                    to="/login"
+                    onClick={handleLogout}
+                  >
+                    <b>خروج</b>
+                  </Link>
+                </li>
               </ul>
             ) : (
               <ul className="navbar-nav">
@@ -127,21 +151,20 @@ function NavBar() {
                     <h5> القيود</h5>
                   </Link>
                 </li>
+                <li className="nav-item btn m-1 p-2 border border-1 rounded">
+                  👤<b> {localStorage.getItem("username")}</b>
+                </li>
+                <li className="nav-item rounded m-1">
+                  <Link
+                    className="nav-link text-light bg-danger rounded p-2 border border-3 border-danger"
+                    to="/login"
+                    onClick={handleLogout}
+                  >
+                    <b>خروج</b>
+                  </Link>
+                </li>
               </ul>
             )}
-
-            <li className="nav-item btn m-1 p-2 border border-1 rounded">
-              👤<b> {localStorage.getItem("username")}</b>
-            </li>
-            <li className="nav-item rounded m-1">
-              <Link
-                className="nav-link text-light bg-danger rounded p-2 border border-3 border-danger"
-                to="/login"
-                onClick={handleLogout}
-              >
-                <b>خروج</b>
-              </Link>
-            </li>
           </div>
         </div>
       </nav>
