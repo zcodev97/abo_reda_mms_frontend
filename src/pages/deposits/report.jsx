@@ -238,7 +238,7 @@ function DepositsReportPage() {
             <div
               className="btn btn-light border border-2 border-warning text-dark m-2"
               onClick={() => {
-                console.log(reportTitle.length);
+                // console.log(reportTitle.length);
                 if (reportTitle.length === 0) {
                   alert("الرجاء ادخال عنوان للتقرير ");
                   return;

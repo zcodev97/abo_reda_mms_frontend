@@ -230,14 +230,14 @@ function WithDrawReportPage() {
           </h3>
 
           <div className="container text-center" id="no-print">
-            <btn
+            <div
               className="btn btn-primary text-light "
               onClick={() => {
                 setActiveSearch(!activeSearch);
               }}
             >
               <b> {activeSearch ? "اخفاء" : "تفعيل"} البحث</b>
-            </btn>
+            </div>
           </div>
 
           <div className="container d-flex justify-content-between align-items-center">
