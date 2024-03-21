@@ -21,9 +21,34 @@
 /* for print */
 @media print {
   @page {
-    size: landscape;
+    size: portrait;
+  }
+  .react-bootstrap-table-pagination-total {
+    display: none;
   }
 
+  #pageDropDown {
+    display: none;
+  }
+  .react-bootstrap-table-pagination-list {
+    display: none;
+  }
+
+  .table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #b71646;
+    background-color: rgb(253, 97, 0);
+    color: rgb(58, 56, 56);
+    font-weight: bold;
+  }
+
+  table {
+    width: 100%;
+    min-width: 100%;
+  }
+  footer {
+    display: block !important;
+  }
   body {
     width: 100%;
   }
@@ -32,4 +57,11 @@
     display: none;
   }
   /* Additional print-specific styles can go here */
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
 }

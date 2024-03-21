@@ -33,7 +33,18 @@ function DepositsReportPage() {
   const [loading, setLoading] = useState(false);
 
   const exportToPDF = () => {
+    // Save the current document title
+    const originalTitle = document.title;
+
+    // Set the document title to the custom title
+    document.title = `تقرير الايداعات  - ${reportTitle} -  ${formatDate(
+      startFirstDate
+    )} - ${formatDate(endFirstDate)}.pdf`;
     window.print();
+
+    window.addEventListener("afterprint", () => {
+      document.title = originalTitle;
+    });
   };
 
   function convertToNormalNumber(price) {
