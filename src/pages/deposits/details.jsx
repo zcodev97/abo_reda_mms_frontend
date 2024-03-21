@@ -17,217 +17,174 @@ function DepositDetailsPage() {
   const navigate = useNavigate();
   const tableRef = useRef(null);
 
-  async function exportToPDF() {
-    const pdf = new jsPDF("landscape");
+  // async function exportToPDF() {
+  //   const pdf = new jsPDF("landscape");
 
-    const input = tableRef.current;
-    html2canvas(input, { scale: 3.0 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/jpeg", 2.0); // JPEG format with quality 0.75
+  //   const input = tableRef.current;
+  //   html2canvas(input, { scale: 3.0 }).then((canvas) => {
+  //     const imgData = canvas.toDataURL("image/jpeg", 2.0); // JPEG format with quality 0.75
 
-      const pdf = new jsPDF({
-        // orientation: "landscape", // Set orientation to landscape
-        unit: "mm", // Use millimeters as the unit for dimensions
-        format: "a4", // Use A4 size paper
-      });
+  //     const pdf = new jsPDF({
+  //       // orientation: "landscape", // Set orientation to landscape
+  //       unit: "mm", // Use millimeters as the unit for dimensions
+  //       format: "a4", // Use A4 size paper
+  //     });
 
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  //     const imgProps = pdf.getImageProperties(imgData);
+  //     const pdfWidth = pdf.internal.pageSize.getWidth();
+  //     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-      // Define margin values
-      const marginLeft = 10; // Left margin in mm
-      const marginRight = 10; // Right margin in mm
-      const marginTop = 10; // Top margin in mm
-      const marginBottom = 10; // Bottom margin in mm
+  //     // Define margin values
+  //     const marginLeft = 10; // Left margin in mm
+  //     const marginRight = 10; // Right margin in mm
+  //     const marginTop = 10; // Top margin in mm
+  //     const marginBottom = 10; // Bottom margin in mm
 
-      // Calculate the adjusted width and height with margins
-      const adjustedWidth = pdfWidth - marginLeft - marginRight;
-      const adjustedHeight = pdfHeight - marginTop - marginBottom;
+  //     // Calculate the adjusted width and height with margins
+  //     const adjustedWidth = pdfWidth - marginLeft - marginRight;
+  //     const adjustedHeight = pdfHeight - marginTop - marginBottom;
 
-      // Calculate the x and y positions to center the adjusted table
-      const xPosition =
-        marginLeft + (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
-      const yPosition =
-        marginTop + (pdf.internal.pageSize.getHeight() - pdfHeight) / 8;
+  //     // Calculate the x and y positions to center the adjusted table
+  //     const xPosition =
+  //       marginLeft + (pdf.internal.pageSize.getWidth() - pdfWidth) / 2;
+  //     const yPosition =
+  //       marginTop + (pdf.internal.pageSize.getHeight() - pdfHeight) / 8;
 
-      pdf.addImage(
-        imgData,
-        "PNG",
-        xPosition,
-        yPosition,
-        adjustedWidth,
-        adjustedHeight
-      );
-      pdf.save(
-        `سند ايداع ${location.state.company_name} - ${location.state.created_at} - ${location.state.received_from}.pdf`
-      );
+  //     pdf.addImage(
+  //       imgData,
+  //       "PNG",
+  //       xPosition,
+  //       yPosition,
+  //       adjustedWidth,
+  //       adjustedHeight
+  //     );
+  //     pdf.save(
+  //       `سند ايداع ${location.state.company_name} - ${location.state.created_at} - ${location.state.received_from}.pdf`
+  //     );
+  //   });
+  // }
+
+  const exportToPDF = () => {
+    // Save the current document title
+    const originalTitle = document.title;
+
+    // Set the document title to the custom title
+    document.title = `سند ايداع ${location.state.company_name} - ${location.state.created_at} - ${location.state.received_from}.pdf`;
+    window.print();
+
+    window.addEventListener("afterprint", () => {
+      document.title = originalTitle;
     });
-  }
+  };
 
   return (
     <>
       <NavBar />
 
-      <hr />
-
-      <div className="container text-center">
+      <div className="container text-center" id="no-print">
         <div className="btn btn-warning p-2" onClick={exportToPDF}>
-          {" "}
           ⬇️ تحميل
         </div>
       </div>
-      <hr />
 
-      <table id="mytable" ref={tableRef} className="table p-2 text-center mt-4">
-        <thead className="mt-4">
-          <tr>
-            <td> </td>
-            <td
-              colSpan={4}
-              className="text-center bg-success text-light rounded"
-            >
-              <div className="container text-center">
-                <div className="container">
-                  <h3>
-                    شركة
-                    <b>
-                      {"  "}
-                      {location.state.company_name} {"  "}
-                    </b>
-                  </h3>
-                </div>
-                <h4>
-                  <b> قسم الحسابات</b>
-                </h4>
-                <h4>
-                  <b>سند ايداع</b>
-                </h4>
-              </div>
-            </td>
-            <td> </td>
-          </tr>
+      <div className="container-fluid text-end m-0">
+        <p style={{ fontWeight: "bold", fontSize: "20px" }}>
+          {location.state.company_name}
+        </p>
+      </div>
+
+      <table
+        id="mytable"
+        ref={tableRef}
+        className="table table-sm table-bordered text-center"
+      >
+        <thead>
+          <td colSpan={2} className="bg-success text-light">
+            سند ايداع
+          </td>
         </thead>
-        <tbody style={{ borderStyle: "" }}>
+        <tbody>
           <tr>
-            <td></td> <td></td> <td></td>{" "}
             <td className="text-end">
-              {" "}
-              <h4> {location.state.invoice_id} </h4>
+              <p> {location.state.invoice_id} </p>
             </td>
             <td className="text-end">
-              {" "}
-              <h4>
-                {" "}
-                <b> رقم السند</b>{" "}
-              </h4>
+              <p>
+                <b> رقم السند</b>
+              </p>
             </td>
           </tr>
           <tr>
-            <td></td> <td></td> <td></td>{" "}
             <td className="text-end">
-              {" "}
-              <h4> {location.state.deposit_number} </h4>
+              <p> {location.state.deposit_number} </p>
             </td>
             <td className="text-end">
-              {" "}
-              <h4>
-                {" "}
-                <b> تسلسل السند</b>{" "}
-              </h4>
+              <p>
+                <b> تسلسل السند</b>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td className="text-end">
+              <p> {location.state.created_at} </p>
+            </td>
+            <td className="text-end">
+              <p>
+                <b> : التاريخ</b>
+              </p>
             </td>
           </tr>
           <tr>
-            <td></td> <td></td> <td></td>{" "}
             <td className="text-end">
-              {" "}
-              <h4> {location.state.received_from} </h4>
+              <p> {location.state.received_from} </p>
             </td>
             <td className="text-end">
-              {" "}
-              <h4>
-                {" "}
-                <b> : نوع الحساب</b>{" "}
-              </h4>
+              <p>
+                <b> : نوع الحساب</b>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td className="text-end">
+              <p> {location.state.price_in_dinar} </p>
+            </td>
+            <td className="text-end">
+              <p>
+                <b> : مبلغ الدينار</b>
+              </p>
             </td>
           </tr>
           <tr>
-            <td></td> <td></td> <td></td>{" "}
             <td className="text-end">
-              {" "}
-              <h4> {location.state.created_at} </h4>
+              <p> {location.state.price_in_dollar} </p>
             </td>
             <td className="text-end">
-              {" "}
-              <h4>
-                {" "}
-                <b> : التاريخ</b>{" "}
-              </h4>
+              <p>
+                <b> : مبلغ الدولار</b>
+              </p>
             </td>
           </tr>
           <tr>
-            <td></td> <td></td> <td></td>{" "}
             <td className="text-end">
-              {" "}
-              <h4> {location.state.price_in_dinar} </h4>
+              <p> {location.state.description} </p>
             </td>
             <td className="text-end">
-              {" "}
-              <h4>
-                {" "}
-                <b> : مبلغ الدينار</b>{" "}
-              </h4>
+              <p>
+                <b> : التفاصيل</b>
+              </p>
             </td>
           </tr>
-          <tr>
-            <td></td> <td></td> <td></td>{" "}
-            <td className="text-end">
-              {" "}
-              <h4> {location.state.price_in_dollar} </h4>
-            </td>
-            <td className="text-end">
-              {" "}
-              <h4>
-                {" "}
-                <b> : مبلغ الدولار</b>{" "}
-              </h4>
-            </td>
-          </tr>
-          <tr>
-            <td></td> <td></td> <td></td>{" "}
-            <td className="text-end">
-              {" "}
-              <h4> {location.state.description} </h4>
-            </td>
-            <td className="text-end">
-              {" "}
-              <h4>
-                {" "}
-                <b> : التفاصيل</b>{" "}
-              </h4>
-            </td>
-          </tr>
-          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
-          <br /> <br /> <br /> <br /> <br /> <br /> <br />
-          <br /> <br /> <br />
-          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
-          <br /> <br /> <br /> <br /> <br /> <br /> <br />
-          <br /> <br /> <br />
-          <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />{" "}
-          <tr>
-            <td></td> <td></td>{" "}
-            <td className="text-end">
-              {" "}
-              <h4> التدقيق </h4>
-            </td>
-            <td></td>
-            <td className="text-start">
-              {" "}
-              <h4> الحسابات </h4>
-            </td>
-          </tr>
-          <br /> <br /> <br />
         </tbody>
       </table>
+
+      <footer className="footer d-flex justify-content-between align-items-center">
+        <p> الحسابات </p>
+        <p> التدقيق </p>
+
+        <p> المستلم </p>
+      </footer>
     </>
   );
 }
