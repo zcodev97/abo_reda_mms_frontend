@@ -3,7 +3,7 @@
 }
 
 .sr-only {
-  display: none;
+  display: none !important;
 }
 
 .react-bootstrap-table table {
@@ -18,8 +18,16 @@
   font-weight: bold;
 }
 
+/* .react-bootstrap-table > table > thead > tr > th .filter {
+  display: none;
+} */
+
 /* for print */
 @media print {
+  .sr-only {
+    display: none !important;
+  }
+
   @page {
     size: portrait;
   }
@@ -51,11 +59,13 @@
   }
   body {
     width: 100%;
+    position: relative;
   }
 
   #no-print {
     display: none;
   }
+
   /* Additional print-specific styles can go here */
 }
 

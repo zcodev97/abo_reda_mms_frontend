@@ -40,6 +40,7 @@ function WithDrawReportPage() {
     document.title = `تقرير الصرفيات  - ${reportTitle} -  ${formatDate(
       startFirstDate
     )} - ${formatDate(endFirstDate)}.pdf`;
+
     window.print();
 
     window.addEventListener("afterprint", () => {
@@ -122,62 +123,62 @@ function WithDrawReportPage() {
       dataField: "created_at",
       text: "تاريخ الانشاء",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "description",
       text: "التفاصيل",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "price_in_dollar",
       text: "مبلغ الدولار",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
 
     {
       dataField: "price_in_dinar",
       text: "مبلغ الدينار",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "out_to",
       text: "الى",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "withdraw_type",
       text: "نوع القيد",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "company_name",
       text: "اسم الشركة",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "container",
       text: "القاصة",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "withdraw_number",
       text: "تسلسل ",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
     {
       dataField: "invoice_id",
       text: "تسلسل السجل",
       sort: true,
-      filter: textFilter(),
+      filter: activeSearch ? textFilter() : null,
     },
   ];
   function convertToNormalNumber(price) {
@@ -215,6 +216,15 @@ function WithDrawReportPage() {
         <Loading />
       ) : (
         <div className="container-fluid p-2 mt-2  border-primary text-dark rounded ">
+          <style>
+            {`
+            @media print {
+              @page {
+                size: landscape;
+              }
+            }
+          `}
+          </style>
           <h3 className="text-center" id="test">
             <b> تقرير الصرفيات </b>
           </h3>
@@ -230,57 +240,9 @@ function WithDrawReportPage() {
             </btn>
           </div>
 
-          <div
-            className="container"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <DateTimePicker
-              key={1}
-              clearIcon={null}
-              format={"y-MM-dd"}
-              onChange={setStartFirstDate}
-              value={startFirstDate}
-            />
-
-            <div className="p-3 text-center"> من</div>
-          </div>
-
-          <div
-            className="container"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <DateTimePicker
-              key={2}
-              clearIcon={null}
-              format={"y-MM-dd"}
-              onChange={setEndFirstDate}
-              value={endFirstDate}
-            />
-
-            <div className="p-3 text-center"> الى</div>
-          </div>
-
-          <div className="container text-center">
+          <div className="container d-flex justify-content-between align-items-center">
             <div
-              className="mt-2 mb-2 btn btn-light border border-2 border-primary text-primary"
-              onClick={() => {
-                loadWithdraws();
-              }}
-              id="no-print"
-            >
-              <b> تنفيذ </b>
-            </div>
-            <br />
-            <div
-              className="btn border border-2  border-danger text-danger  text-center"
+              className="btn btn-light border border-2 border-warning text-dark m-2"
               onClick={() => {
                 if (reportTitle.length === 0) {
                   alert("الرجاء ادخال عنوان للتقرير ");
@@ -290,7 +252,57 @@ function WithDrawReportPage() {
               }}
               id="no-print"
             >
-              <b> طباعة 📁 </b>
+              <b>طباعة</b>
+            </div>
+
+            <div
+              className="btn btn-light border border-2 border-primary text-primary"
+              onClick={() => {
+                loadWithdraws();
+              }}
+              id="no-print"
+            >
+              <b> تنفيذ </b>
+            </div>
+
+            <div
+              id="no-print"
+              className="container"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <DateTimePicker
+                key={2}
+                clearIcon={null}
+                format={"y-MM-dd"}
+                onChange={setEndFirstDate}
+                value={endFirstDate}
+              />
+
+              <div className="p-3 text-center"> الى</div>
+            </div>
+
+            <div
+              id="no-print"
+              className="container"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <DateTimePicker
+                key={1}
+                clearIcon={null}
+                format={"y-MM-dd"}
+                onChange={setStartFirstDate}
+                value={startFirstDate}
+              />
+
+              <div className="p-3 text-center"> من</div>
             </div>
           </div>
 
@@ -314,7 +326,14 @@ function WithDrawReportPage() {
                 dir="rtl"
               />
             </div>
-            <div className="container-fluid" style={{ overflowX: "auto" }}>
+            <div
+              className="table table-sm"
+              style={{
+                overflowX: "auto",
+                width: "100%",
+                fontSize: "14px",
+              }}
+            >
               <BootstrapTable
                 className="text-center"
                 hover={true}
@@ -328,55 +347,48 @@ function WithDrawReportPage() {
                 pagination={pagination}
                 filter={filterFactory({ afterFilter })}
               />
-              <div className="container text-center">
-                <table className="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>
-                        {totalDinar.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "IQD",
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td>مجموع الدينار</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {totalDollar.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 2,
-                        })}
-                      </td>
-                      <td>مجموع الدولار</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
             </div>
           </div>
-          <footer className="footer">
-            <div
-              className="container text-center"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="container text-start">
-                <h4> التدقيق </h4>
-              </div>
-              <div className="container text-end">
-                <h4> الحسابات </h4>
-              </div>
-            </div>
-          </footer>
         </div>
       )}
+
+      <div className="container d-flex justify-content-between align-items-center">
+        <table className="table table-sm text-center ">
+          <tbody>
+            <tr>
+              <td>
+                {totalDinar.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "IQD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td>مجموع الدينار</td>
+            </tr>
+            <tr>
+              <td>
+                {totalDollar.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+              </td>
+              <td>مجموع الدولار</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        id="print-footer"
+        className="container-fluid d-flex justify-content-between align-items-center"
+      >
+        <p> الحسابات </p>
+        <p> التدقيق </p>
+
+        <p> المستلم </p>
+      </div>
     </>
   );
 }

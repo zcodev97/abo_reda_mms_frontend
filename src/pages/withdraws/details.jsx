@@ -97,6 +97,7 @@ function WithDrawDetialsPage() {
         id="mytable"
         ref={tableRef}
         className="table table-sm table-bordered text-center"
+        style={{ fontSize: "16px" }}
       >
         <thead>
           <td colSpan={2} className="bg-success text-light">
